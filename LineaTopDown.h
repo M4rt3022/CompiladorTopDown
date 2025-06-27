@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-enum {ERROR_FIN_LINEA,ERROR_NODO_ABRE,ERROR_NODO_CIERRA,ERROR_CARACTER_DOBLE,ERROR_ABRIR_ARCHIVO,ERROR_STRING_VACÍO};
+#include "ErrorHandler.h"	//clase personalizada para manejar los errores en el programa
 class LineaTopDown{
 	private:
 		int numeroDentado;
@@ -15,8 +15,8 @@ class LineaTopDown{
 		void cuentaDentado();
 		//método interno para revisar si la línea almacenada tiene caracteres importantes
 		void buscaCaracteresImportantes();
-		//método interno para buscar dobles caracteres importantes o más de un caracter importante por línea, lanza excepción en caso de error
-		void revisaCorrectaSintaxis();
+		//método interno que cuentaDentado, buscaCaracteresImportantes y se fija si tiene caracteres dobles o están mal escritos en la línea
+		void analizaSintaxis();
 	public:
 		//constructores
 		LineaTopDown();

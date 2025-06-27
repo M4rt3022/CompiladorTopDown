@@ -3,6 +3,7 @@
 #include <iostream>
 #include <istream>
 #include <string>
+#include "ErrorHandler.h" // clase personalizada para facilitar el manejo de excepciones en el programa
 void LineaTopDown::cuentaDentado(){
 	bool primerLetra = false;// bandera para marcar cuando encuentre la primer letra de la línea
 	int cantidadDentado = 0;
@@ -17,7 +18,6 @@ void LineaTopDown::cuentaDentado(){
 		}
 		primerLetra = true;
 	}
-	std::cout << "la cantidad de tabuladores es: " << cantidadDentado << std::endl;
 	numeroDentado = cantidadDentado;
 	return;
 }
@@ -45,31 +45,33 @@ void LineaTopDown::buscaCaracteresImportantes(){
 	}
 	return;
 }
-void LineaTopDown::revisaCorrectaSintaxis(){
+void LineaTopDown::analizaSintaxis(){
 	//primero se fija si tiene algo que leer
 	if(caracteres.empty()){
 		return;
 	}
+	cuentaDentado();
+	buscaCaracteresImportantes();
 	//si no tiene ningún caracter importante, no hay nada más que analizar
 	if((caracter_fin_linea||caracter_nodo_abre||caracter_nodo_cierra)){}
 	//si tiene más de un caracter importante, está mal escrita
 	if((caracter_fin_linea&&caracter_nodo_abre)||(caracter_fin_linea&&caracter_nodo_cierra)||(caracter_nodo_abre&&caracter_nodo_cierra)){
-		throw(int(ERROR_CARACTER_DOBLE));
+		throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
 		return;
 	}
 	//si la línea tiene el caracter_fin_linea y no es el último, no está bien escrita la línea
 	if(caracter_fin_linea&&caracteres.back()!=';'){
-		throw(int(ERROR_FIN_LINEA));
+		throw(ErrorHandler(TipoError::ERROR_LINEA_FIN_LINEA));
 		return;
 	}
 	//si la línea tiene el caracter_nodo_abre y no es el último, no está bien escrita la línea
 	if(caracter_nodo_abre&&caracteres.back()!='{'){
-		throw(int(ERROR_NODO_ABRE));
+		throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
 		return;
 	}
 	//si la línea tiene el caracter_nodo_cierra y no es el último, no está bien escrita la línea
 	if(caracter_nodo_cierra&&caracteres.back()!='}'){
-		throw(int(ERROR_NODO_CIERRA));
+		throw(ErrorHandler(TipoError::ERROR_LINEA_NODO_CIERRA));
 		return;
 	}
 }
@@ -80,10 +82,11 @@ LineaTopDown::~LineaTopDown(){
 }
 LineaTopDown::LineaTopDown(const int &dentado,const std::string &carac){
 	numeroDentado = dentado;
-	if(numeroDentado< 0){ 
+	if(numeroDentado < 0){ 
 	numeroDentado = 0;
 	}
 	caracteres = carac;
+	analizaSintaxis();
 	return;
 }
 LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
@@ -92,10 +95,12 @@ LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
 	caracter_fin_linea = l.caracter_fin_linea;
 	caracter_nodo_abre = l.caracter_nodo_abre;
 	caracter_nodo_cierra = l.caracter_nodo_cierra;
+	analizaSintaxis();
 	return *this;
 }
 std::istream& operator>>(std::istream&is, LineaTopDown&l){
 	is >> l.caracteres;
+	l.analizaSintaxis();
 	return is;
 }
 std::ostream& operator<< (std::ostream& os, const LineaTopDown& l){
@@ -103,19 +108,10 @@ std::ostream& operator<< (std::ostream& os, const LineaTopDown& l){
 	return os;
 }
 void LineaTopDown::leeDesdeArchivo(std::ifstream& archivo){
-	try{
-		if (!archivo){
-			throw (int (ERROR_ABRIR_ARCHIVO));
-		}
-		std::getline(archivo,caracteres);
-		cuentaDentado();
-		buscaCaracteresImportantes();
+	if (!archivo){
+		throw (ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
 	}
-	catch(int e){
-		switch (e) {
-			case(int(ERROR_ABRIR_ARCHIVO)):
-				std::cerr << "[ERROR]: la lectura de archivo falló" << std::endl;
-		}
-	}
+	std::getline(archivo,caracteres);
+	analizaSintaxis();
 	return;
 }
