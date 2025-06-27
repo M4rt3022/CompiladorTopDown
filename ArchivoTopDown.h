@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include "LineaTopDown.h"
+#include "ErrorHandler.h"
 class ArchivoTopDown{
 	private:
 		std::vector<LineaTopDown> LineasArchivo;
