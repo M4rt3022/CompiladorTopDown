@@ -1,22 +1,8 @@
 #include <iostream>
-#include <ostream>
-#include <fstream>
-#include "LineaTopDown.h"
+#include "ArchivoTopDown.h"
 int main(){
-	std::ifstream archivo("topdown");
-	LineaTopDown linea;
-	if (!archivo){
-		std::cout << "apertura de archivo fallida" << std::endl;
-		return 1;
-	}
-	std::cout << "archivo abierto exitosamente, se extraerá la primer línea del archivo y sus datos" << std::endl;
-	linea.leeDesdeArchivo(archivo);
-	std::cout << "la línea extraída es: " << linea << std::endl;
-	std::cout << "numero de línea: " << linea.getNumero() << " numero de dentado: " << linea.getDentado() << std::endl;
-	std::cout << "se extraerá la segunda línea" << std::endl;
-	linea.leeDesdeArchivo(archivo);
-	std::cout << "la línea extraída es: " << linea << std::endl;
-	std::cout << "numero de línea: " << linea.getNumero() << " numero de dentado: " << linea.getDentado() << std::endl;
-	archivo.close();
+	ArchivoTopDown archivoTD;
+	std::cout << "se intentará abrir el archivo de top down y se contarán las líneas" << std::endl;
+	archivoTD.leeDesdeArchivo();
 	return 0;
 }

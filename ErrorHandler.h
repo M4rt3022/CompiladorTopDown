@@ -11,6 +11,8 @@ enum class TipoError {
 	ERROR_LINEA_CARAC_DOBLE,
 	ERROR_LINEA_STRING_VACIO,
 	ERROR_LINEA_ABRIR_ARCHIVO,
+	ERROR_LINEA_INEXISTENTE, 
+	ERROR_LINEA_ARCHIVO_VACÍO,
 };
 //clase que busca el error al ser inicializada y devuelve un mensaje en consecuencia
 class ErrorHandler : public std::exception
@@ -21,17 +23,21 @@ class ErrorHandler : public std::exception
 		static std::string obtenerMensajeError(TipoError error){
 			switch(error){
 				case(TipoError::ERROR_LINEA_FIN_LINEA):
-					return "el caracter de final de línea debe ser el último";
+					return "El caracter de final de línea debe ser el último";
 				case(TipoError::ERROR_LINEA_NODO_ABRE):
-					return "el caracter de apertura de nodo debe ser el último";
+					return "El caracter de apertura de nodo debe ser el último";
 				case(TipoError::ERROR_LINEA_NODO_CIERRA):
-					return "el caracter de cerrado de nodo debe ser el último";
+					return "El caracter de cerrado de nodo debe ser el último";
 				case(TipoError::ERROR_LINEA_CARAC_DOBLE):
-					return "se encontró más de un caracter importante en la línea";
+					return "Ee encontró más de un caracter importante en la línea";
 				case(TipoError::ERROR_LINEA_STRING_VACIO):
-					return "el string leído está vacío";
+					return "El string leído está vacío";
 				case(TipoError::ERROR_LINEA_ABRIR_ARCHIVO):
-					return "error al abrir el archivo";
+					return "Error al abrir el archivo";
+				case(TipoError::ERROR_LINEA_INEXISTENTE):
+					return "El numero de línea buscado no existe";
+				case(TipoError::ERROR_LINEA_ARCHIVO_VACÍO):
+					return "El archivo abierto se encuentra vacío";
 				default:
 					return "error desconocido";
 			}
