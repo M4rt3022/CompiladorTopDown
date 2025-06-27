@@ -20,7 +20,7 @@ class LineaTopDown{
 	public:
 		//constructores
 		LineaTopDown();
-		LineaTopDown(const int &dentado,const std::string &carac);
+		LineaTopDown(const std::string &carac);
 		~LineaTopDown();
 		//métodos gets
 		int getDentado(void) const {return numeroDentado;}
@@ -34,7 +34,5 @@ class LineaTopDown{
 		LineaTopDown& operator= (const LineaTopDown& l);
 		friend std::ostream& operator<< (std::ostream& os, const LineaTopDown& l);
 		friend std::istream& operator>> (std::istream& is, LineaTopDown&l);
-		//método para leer desde un archivo
-		void leeDesdeArchivo(std::ifstream& archivo);
 };
 #endif

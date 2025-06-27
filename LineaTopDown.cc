@@ -80,11 +80,7 @@ LineaTopDown::~LineaTopDown(){
 	caracteres.clear();
 	return;
 }
-LineaTopDown::LineaTopDown(const int &dentado,const std::string &carac){
-	numeroDentado = dentado;
-	if(numeroDentado < 0){ 
-	numeroDentado = 0;
-	}
+LineaTopDown::LineaTopDown(const std::string &carac){
 	caracteres = carac;
 	analizaSintaxis();
 	return;
@@ -106,12 +102,4 @@ std::istream& operator>>(std::istream&is, LineaTopDown&l){
 std::ostream& operator<< (std::ostream& os, const LineaTopDown& l){
 	os << l.caracteres;
 	return os;
-}
-void LineaTopDown::leeDesdeArchivo(std::ifstream& archivo){
-	if (!archivo){
-		throw (ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
-	}
-	std::getline(archivo,caracteres);
-	analizaSintaxis();
-	return;
 }

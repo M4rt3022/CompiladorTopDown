@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -33,6 +34,14 @@ void ArchivoTopDown::leeDesdeArchivo(){
 		}
 		LineasArchivo.resize(cantidadLineas);
 		std::cout << "ahora el vector cuenta con " << LineasArchivo.capacity() << "lineas guardadas" << std::endl;
+		// si todo esto salió bien, se leerá todo en serio
+		// apuntamos al principio del archivo y leemos
+		entrada.seekg(0);
+		std::getline(entrada,auxiliar);
+		for(int i = 0; i < LineasArchivo.capacity() ;i++){
+			LineasArchivo.push_front(auxiliar);
+			std::getline(entrada,auxiliar);
+		}
 	}
 	catch(const ErrorHandler& error){
 		entrada.close();
