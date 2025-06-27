@@ -32,63 +32,61 @@ void LineaTopDown::buscaCaracteresImportantes(){
 	// caracter_fin_linea = ';'
 	// caracter_nodo_abre = '{'
 	// caracter_nodo_cierra = '}'
-	// IMPORTANTE lo único que puede salir mal es que se repita un caracter importante, lanzará excepción en dicho caso
-	try{
-			
-		for(std::string::iterator it = caracteres.begin(); it != caracteres.end(); it++){
-			if( *it==';' && ! caracter_fin_linea ){
-				caracter_fin_linea = true;
-			}else if( *it==';' && caracter_fin_linea ){
-				throw (int(ERROR_CARACTER_DOBLE));
-			}
-			if( *it=='{' && ! caracter_nodo_abre ){
-				caracter_nodo_abre = true;
-			}else if( *it=='{' && caracter_nodo_abre ){
-				throw (int(ERROR_CARACTER_DOBLE));
-			}
-			if(*it=='}' && ! caracter_nodo_cierra ){
-				caracter_nodo_cierra = true;
-			}else if( *it=='}' && caracter_nodo_cierra ){
-				throw (int(ERROR_CARACTER_DOBLE));
-			}
+	for(std::string::iterator it = caracteres.begin(); it != caracteres.end(); it++){
+		if( *it==';'){
+			caracter_fin_linea = true;
 		}
-	}
-	catch(int e){
-		switch (e) {
-			case(int(ERROR_CARACTER_DOBLE)):
-				std::cerr << "[ERROR] línea " << numeroLinea << ": tiene más de un caracter importante" << std::endl;
+		if( *it=='{'){
+			caracter_nodo_abre = true;
+		}
+		if(*it=='}'){
+			caracter_nodo_cierra = true;
 		}
 	}
 	return;
 }
-void LineaTopDown::setNumero(const int& numero){
-	numeroLinea = numero;
-	if(numeroLinea < 0){ 
-		numeroLinea = 0;
+void LineaTopDown::revisaCorrectaSintaxis(){
+	//primero se fija si tiene algo que leer
+	if(caracteres.empty()){
+		return;
 	}
-	return;
+	//si no tiene ningún caracter importante, no hay nada más que analizar
+	if((caracter_fin_linea||caracter_nodo_abre||caracter_nodo_cierra)){}
+	//si tiene más de un caracter importante, está mal escrita
+	if((caracter_fin_linea&&caracter_nodo_abre)||(caracter_fin_linea&&caracter_nodo_cierra)||(caracter_nodo_abre&&caracter_nodo_cierra)){
+		throw(int(ERROR_CARACTER_DOBLE));
+		return;
+	}
+	//si la línea tiene el caracter_fin_linea y no es el último, no está bien escrita la línea
+	if(caracter_fin_linea&&caracteres.back()!=';'){
+		throw(int(ERROR_FIN_LINEA));
+		return;
+	}
+	//si la línea tiene el caracter_nodo_abre y no es el último, no está bien escrita la línea
+	if(caracter_nodo_abre&&caracteres.back()!='{'){
+		throw(int(ERROR_NODO_ABRE));
+		return;
+	}
+	//si la línea tiene el caracter_nodo_cierra y no es el último, no está bien escrita la línea
+	if(caracter_nodo_cierra&&caracteres.back()!='}'){
+		throw(int(ERROR_NODO_CIERRA));
+		return;
+	}
 }
-LineaTopDown::LineaTopDown(): numeroLinea(0), numeroDentado(0), caracteres(""), caracter_fin_linea(false), caracter_nodo_abre(false),caracter_nodo_cierra(false){}
+LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), caracter_nodo_abre(false),caracter_nodo_cierra(false){}
 LineaTopDown::~LineaTopDown(){
 	caracteres.clear();
 	return;
 }
-LineaTopDown::LineaTopDown(const int &numero,const int &dentado,const std::string &carac){
-	numeroLinea = numero;
-	if(numeroLinea < 0){ 
-	numeroLinea = 0;
-	}
+LineaTopDown::LineaTopDown(const int &dentado,const std::string &carac){
 	numeroDentado = dentado;
 	if(numeroDentado< 0){ 
 	numeroDentado = 0;
 	}
 	caracteres = carac;
-	cuentaDentado();
-	buscaCaracteresImportantes();
 	return;
 }
 LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
-	numeroLinea = l.numeroLinea;
 	numeroDentado = l.numeroDentado;
 	caracteres = l.caracteres;
 	caracter_fin_linea = l.caracter_fin_linea;
