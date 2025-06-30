@@ -13,6 +13,7 @@ enum class TipoError {
 	ERROR_LINEA_ABRIR_ARCHIVO,
 	ERROR_LINEA_INEXISTENTE, 
 	ERROR_LINEA_ARCHIVO_VACÍO,
+	ERROR_LINEA_MAL_ESCRITA,
 };
 //clase que busca el error al ser inicializada y devuelve un mensaje en consecuencia
 class ErrorHandler : public std::exception
@@ -38,8 +39,10 @@ class ErrorHandler : public std::exception
 					return "El numero de línea buscado no existe";
 				case(TipoError::ERROR_LINEA_ARCHIVO_VACÍO):
 					return "El archivo abierto se encuentra vacío";
+				case(TipoError::ERROR_LINEA_MAL_ESCRITA):
+					return "La linea que intenta obtener está mal escrita";
 				default:
-					return "error desconocido";
+					return "Error desconocido";
 			}
 
 		}

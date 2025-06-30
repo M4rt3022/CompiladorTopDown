@@ -14,9 +14,8 @@ class Nodo{
 		//constructores
 		Nodo();
 		Nodo(const std::string& o, const std::string& oP, const std::string& cont);
-		Nodo(const std::string& o, const std::string& oP, const LineaTopDown& linea);
 		//destructor
-		virtual ~Nodo(); //puede que no haga falta el virtual
+		~Nodo();
 		//métodos set
 		void setOrden(const std::string& o);
 		void setOrdenPadre(const std::string& oP);

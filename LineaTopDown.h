@@ -11,6 +11,7 @@ class LineaTopDown{
 		bool caracter_fin_linea;
 		bool caracter_nodo_abre;
 		bool caracter_nodo_cierra;
+		bool linea_bien_escrita;
 		//método interno para contar la cantidad de caracteres de dentado que hay
 		void cuentaDentado();
 		//método interno para revisar si la línea almacenada tiene caracteres importantes
@@ -28,6 +29,9 @@ class LineaTopDown{
 		bool getFinLinea(void)const{return caracter_fin_linea;}
 		bool getNodoAbre(void)const{return caracter_nodo_abre;}
 		bool getNodoCierra(void)const{return caracter_nodo_cierra;}
+		bool getLineaBienEscrita(void)const{return linea_bien_escrita;}
+		//devuelve el contenido de la línea antes de un caracter importante, si está bien escrita
+		void obtieneContenido(std::string& salida);
 		//metodo set
 		void setNumero(const int& numero);
 		//sobrecarga operadores
