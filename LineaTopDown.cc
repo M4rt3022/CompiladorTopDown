@@ -34,19 +34,20 @@ void LineaTopDown::buscaCaracteresImportantes(){
 	// caracter_nodo_cierra = '}'
 	try{
 		for (char c : caracteres) {
-			switch (c) {
-				case ';':
-					if (caracter_fin_linea) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-					caracter_fin_linea = true;
-					break;
-				case '{':
-					if (caracter_nodo_abre) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-					caracter_nodo_abre = true;
-					break;
-				case '}':
-					if (caracter_nodo_cierra) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-					caracter_nodo_cierra = true;
-					break;
+			if((c == ';')&&(caracter_fin_linea == false)){
+				caracter_fin_linea = true;
+			}else if((c==';')&&(caracter_fin_linea == true)){
+				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+			}
+			if((c == '{')&&(caracter_nodo_abre == false)){
+				caracter_fin_linea = true;
+			}else if((c == '{')&&(caracter_nodo_abre == true)){
+				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+			}
+			if((c == '}')&&(caracter_nodo_cierra== false)){
+				caracter_fin_linea = true;
+			}else if((c == '}')&&(caracter_nodo_cierra == true)){
+				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
 			}
 		}
 	}
@@ -58,6 +59,7 @@ void LineaTopDown::buscaCaracteresImportantes(){
 }
 void LineaTopDown::analizaSintaxis(){
 	int booleanosActivos = caracter_fin_linea + caracter_nodo_abre + caracter_nodo_cierra;
+
 	//primero se fija si tiene algo que leer
 	if(caracteres.empty()){
 		return;
