@@ -1,4 +1,4 @@
-#include "LineaTopDown.h"
+#include "LineaTopDown.h != '\n'"
 #include <iostream>
 #include <istream>
 #include <string>
@@ -142,7 +142,7 @@ void LineaTopDown::obtieneContenido(std::string& salida){
 		}
 		std::string::const_iterator it = caracteres.begin();
 		while(it != caracteres.end() && ((*it) == ' ' || (*it) == '\t' )) ++it; //método zabalero para llegar a la parte con palabras de un string
-		while(it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}'){
+		while(it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}' && (*it) != '\n'){
 			salida += *it;
 			++it;
 		}

@@ -20,7 +20,7 @@ class ArchivoTopDown{
 		int getCantidadLineas ();
 		bool getError(void)const{return ocurrio_un_error;}
 		//método que llama a getContenido y lo devuelve
-		std::string getContenidoLinea (const int& orden);
+		void getContenidoLinea (const int& orden,std::string& salida);
 		//Devuelve la cantidad de tabuladores de la linea que se encuentra en orden
 		int getDentadoLinea(const int& orden);
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo

@@ -12,11 +12,11 @@ ArchivoTopDown::ArchivoTopDown(){
 ArchivoTopDown::~ArchivoTopDown(){
 }
 int ArchivoTopDown::getCantidadLineas(){
-	return LineasArchivo.capacity();
+	return LineasArchivo.size();
 }
 int ArchivoTopDown::getDentadoLinea(const int& orden){
 	try{
-		if(orden>LineasArchivo.capacity()){
+		if(orden>LineasArchivo.size()){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		return (LineasArchivo[orden].getDentado());
@@ -67,11 +67,17 @@ std::string ArchivoTopDown::getLinea(const int& numero){
 	//acá debería revisar que sea un número válido
 	return LineasArchivo[numero].getCaracteres();
 }
-std::string ArchivoTopDown::getContenidoLinea(const int & orden){
+void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 	try{
-		if(orden > LineasArchivo.capacity())
+		if(orden > LineasArchivo.size()){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
+		}
+		LineasArchivo[orden].obtieneContenido(salida);
+		return;
 	}
 	catch(const ErrorHandler& error){
+		salida = "";
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		return;
 	}
 }

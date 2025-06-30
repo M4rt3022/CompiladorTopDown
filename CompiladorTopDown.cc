@@ -20,7 +20,12 @@ int CompiladorTopDown::revisaCorrectoDentado(){
 }
 int CompiladorTopDown::buscaTituloTP(){
 	std::string titulo;
-
+	ArchivoTD.getContenidoLinea(0,titulo); 
+	if (titulo.empty()){
+		return 1;
+	}
+	//acá debería guardar el primer nodo
+	return 0;
 }
 void CompiladorTopDown::compilar(){
 	try{
@@ -32,9 +37,10 @@ void CompiladorTopDown::compilar(){
 		}
 		//busca el título del topdown y lo guarda en un nodo
 		if(revisaCorrectoDentado()==1){
-			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO))
+			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
 		//busca el título del archivo a guardar
+
 	}
 	catch(const ErrorHandler& error){
 		std::cerr << "[ERROR]: " << error.what() << ", no seguirá compilando" << std::endl;
