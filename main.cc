@@ -1,10 +1,5 @@
-#include <iostream>
-#include "ArchivoTopDown.h"
+#include "CompiladorTopDown.h"
 int main(){
-	{
-		ArchivoTopDown archivoTD;
-		std::cout << "se intentará abrir el archivo de top down y se contarán las líneas" << std::endl;
-		archivoTD.leeDesdeArchivo();
-	}
+	CompiladorTopDown compiladorTD;
 	return 0;
 }

@@ -16,6 +16,8 @@ enum class TipoError {
 	ERROR_LINEA_MAL_ESCRITA,
 	ERROR_TOPDOWN_ABRIR_ARCHIVO,
 	ERROR_TOPDOWN_ARCHIVO_VACÍO,
+	ERROR_COMPILADOR_ERROR_ARCHIVOTD,
+	ERROR_COMPILADOR_ERROR_DENTADO,
 };
 //clase que busca el error al ser inicializada y devuelve un mensaje en consecuencia
 class ErrorHandler : public std::exception
@@ -32,7 +34,7 @@ class ErrorHandler : public std::exception
 				case(TipoError::ERROR_LINEA_NODO_CIERRA):
 					return "El caracter de cerrado de nodo debe ser el último";
 				case(TipoError::ERROR_LINEA_CARAC_DOBLE):
-					return "Ee encontró más de un caracter importante en la línea";
+					return "Se encontró más de un caracter importante en la línea";
 				case(TipoError::ERROR_LINEA_STRING_VACIO):
 					return "El string leído está vacío";
 				case(TipoError::ERROR_LINEA_ABRIR_ARCHIVO):
@@ -47,6 +49,10 @@ class ErrorHandler : public std::exception
 					return "No se pudo abrir el archivo para guardar el topdown";
 				case(TipoError::ERROR_TOPDOWN_ARCHIVO_VACÍO):
 					return "El topdown a guardar está vacío, no se guardará";
+				case(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD):
+					return "Algo salió mal en la lectura del topdown";
+				case(TipoError::ERROR_COMPILADOR_ERROR_DENTADO):
+					return "El dentado que tiene el archivo no es correcto";
 				default:
 					return "Error desconocido";
 			}

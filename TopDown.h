@@ -9,11 +9,14 @@
 class Topdown{
 	private:
 		std::vector<Nodo> nodos;
+		bool ocurrio_un_error;
 	public:
 		//constructor
 		Topdown();
 		//destructor
 		~Topdown();
+		//método get
+		bool getError(void){return ocurrio_un_error;}
 		//metodo para guardar topdown en un archivo
 		void guardaTopDown();
 };
