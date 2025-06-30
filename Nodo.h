@@ -1,6 +1,7 @@
 #ifndef NODO_H_
 #define NODO_H_
 #include <iostream>
+#include <ostream>
 #include <string>
 #include "LineaTopDown.h"
 class Nodo{
@@ -25,8 +26,10 @@ class Nodo{
 		std::string getOrdenPadre(void)const { return ordenPadre;}
 		std::string getContenido(void) const {return contenido;}
 		//sobrecarga operadores
-		//no sé si necesitaré más operadores que estos
 		Nodo& operator=(const Nodo& n);
-		bool& operator==(const Nodo& n);
+		bool operator==(const Nodo& n);
+		friend std::ostream& operator<< (std::ostream& os, const Nodo& n);
+		//metodo para guardar nodo en un string
+		void guardarEnString(std::string & s);
 };
 #endif

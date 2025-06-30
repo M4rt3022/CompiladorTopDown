@@ -41,3 +41,19 @@ Nodo& Nodo::operator=(const Nodo& n){
 	contenido = n.getContenido();
 	return *this;
 }
+bool Nodo::operator==(const Nodo& n){
+	if((orden==n.orden)&&(ordenPadre==n.ordenPadre)&&(contenido==n.contenido)){
+		return true;
+	}
+	return false;
+}
+std::ostream& operator<< (std::ostream& os, const Nodo& n){
+	os << "orden(" << n.getOrden() << ")."
+	<< "ordenPadre(" << n.getOrdenPadre() << ")."
+	<< "contenido(" << n.getContenido() << ");";
+	return os;
+}
+void Nodo::guardarEnString(std::string & s){
+	s += std::string("orden(") + getOrden() + std::string(").") + std::string("ordenPadre(.") + getOrdenPadre() + std::string(").")
+		+ std::string("contenido(") + getContenido() + std::string(");") ;
+}
