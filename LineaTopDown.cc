@@ -1,5 +1,4 @@
 #include "LineaTopDown.h"
-#include <fstream>
 #include <iostream>
 #include <istream>
 #include <string>
@@ -22,7 +21,7 @@ void LineaTopDown::cuentaDentado(){
 	return;
 }
 void LineaTopDown::buscaCaracteresImportantes(){
-	//si la línea está vacía, no tiene fin_de_linea
+	//si la línea está vacía, no tiene fin_de_linea ni caracter_nodo_abre ni caracter_nodo_cierra
 	if(caracteres.empty()){
 		caracter_fin_linea = false;
 		caracter_nodo_abre = false;
@@ -46,6 +45,7 @@ void LineaTopDown::buscaCaracteresImportantes(){
 	return;
 }
 void LineaTopDown::analizaSintaxis(){
+	int booleanosActivos = caracter_fin_linea + caracter_nodo_abre + caracter_nodo_cierra;
 	//primero se fija si tiene algo que leer
 	if(caracteres.empty()){
 		return;
@@ -53,35 +53,45 @@ void LineaTopDown::analizaSintaxis(){
 	cuentaDentado();
 	buscaCaracteresImportantes();
 	//si no tiene ningún caracter importante, no hay nada más que analizar
-	if((caracter_fin_linea||caracter_nodo_abre||caracter_nodo_cierra)){}
-	//si tiene más de un caracter importante, está mal escrita
-	if((caracter_fin_linea&&caracter_nodo_abre)||(caracter_fin_linea&&caracter_nodo_cierra)||(caracter_nodo_abre&&caracter_nodo_cierra)){
-		throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+	if((caracter_fin_linea&&caracter_nodo_abre&&caracter_nodo_cierra) == false){
 		return;
 	}
-	//si la línea tiene el caracter_fin_linea y no es el último, no está bien escrita la línea
-	if(caracter_fin_linea&&caracteres.back()!=';'){
-		throw(ErrorHandler(TipoError::ERROR_LINEA_FIN_LINEA));
-		return;
+	try{
+		//si tiene más de un caracter importante, está mal escrita
+		if(booleanosActivos>1){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+			return;
+		}
+		//si la línea tiene el caracter_fin_linea y no es el último, no está bien escrita la línea
+		if(caracter_fin_linea&&caracteres.back()!=';'){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_FIN_LINEA));
+			return;
+		}
+		//si la línea tiene el caracter_nodo_abre y no es el último, no está bien escrita la línea
+		if(caracter_nodo_abre&&caracteres.back()!='{'){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+			return;
+		}
+		//si la línea tiene el caracter_nodo_cierra y no es el último, no está bien escrita la línea
+		if(caracter_nodo_cierra&&caracteres.back()!='}'){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_NODO_CIERRA));
+			return;
+		}
 	}
-	//si la línea tiene el caracter_nodo_abre y no es el último, no está bien escrita la línea
-	if(caracter_nodo_abre&&caracteres.back()!='{'){
-		throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-		return;
-	}
-	//si la línea tiene el caracter_nodo_cierra y no es el último, no está bien escrita la línea
-	if(caracter_nodo_cierra&&caracteres.back()!='}'){
-		throw(ErrorHandler(TipoError::ERROR_LINEA_NODO_CIERRA));
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return;
 	}
 }
-LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), caracter_nodo_abre(false),caracter_nodo_cierra(false){}
+LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), caracter_nodo_abre(false),caracter_nodo_cierra(false){
+}
 LineaTopDown::~LineaTopDown(){
-	caracteres.clear();
-	return;
 }
-LineaTopDown::LineaTopDown(const std::string &carac){
+LineaTopDown::LineaTopDown(const std::string& carac){
 	caracteres = carac;
+	caracter_fin_linea = false;
+	caracter_nodo_abre = false;
+	caracter_nodo_cierra = false;
 	analizaSintaxis();
 	return;
 }

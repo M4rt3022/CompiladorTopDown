@@ -3,15 +3,3 @@ problema 62;
 	calcular la cantidad
 	de vocales en el string;
 	repetir para todas las letras en el string{
-	letra es vocal{
-			contar letra;;
-		}
-	}
-	calcular la cantidad
-	de blancos en el string;
-		repetir para todas las letras en el string{
-			letra es espacio en blanco{
-				contar letra;
-			}
-		}
-	mostrar el resultado;

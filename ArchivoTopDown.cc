@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -8,36 +9,41 @@ ArchivoTopDown::ArchivoTopDown(){
 	LineasArchivo.reserve(10);
 }
 ArchivoTopDown::~ArchivoTopDown(){
-	LineasArchivo.clear();
 }
 void ArchivoTopDown::leeDesdeArchivo(){
 	int cantidadLineas = 0;
 	std::string auxiliar;
 	std::ifstream entrada("topdown");
-	try{
-		if(!entrada){
-			throw(ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
+
+	try {
+		if (!entrada) {
+		    throw(ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
 		}
-		entrada.seekg(0,entrada.beg);
-		std::getline(entrada,auxiliar);
-		while(!entrada.eof()){
-			cantidadLineas ++;
-			std::getline(entrada,auxiliar);
+
+		// Contar líneas válidas
+		while (std::getline(entrada, auxiliar)) {
+		    cantidadLineas++;
 		}
-		entrada.clear();
-		if(cantidadLineas==0){
-			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
+
+		if (cantidadLineas == 0) {
+		    throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
+
 		LineasArchivo.resize(cantidadLineas);
-		entrada.seekg(0,entrada.beg);
-		for(int i = 0; i < cantidadLineas ;i++){
-			LineasArchivo.emplace_back(auxiliar);
+
+		// Volver a leer desde el principio
+		entrada.clear();
+		entrada.seekg(0, entrada.beg);
+
+		for (int i = 0; i < cantidadLineas; ++i) {
+		    std::getline(entrada, auxiliar);
+		    LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
+
 		entrada.close();
 	}
-	catch(const ErrorHandler& error){
+	catch (const ErrorHandler& error) {
 		entrada.close();
-		std::cerr << "[ERROR]: " << error.what() << std::endl;
 	}
 }
 std::string ArchivoTopDown::getLinea(const int& numero){
