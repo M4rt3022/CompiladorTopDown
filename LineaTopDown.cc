@@ -26,21 +26,33 @@ void LineaTopDown::buscaCaracteresImportantes(){
 		caracter_fin_linea = false;
 		caracter_nodo_abre = false;
 		caracter_nodo_cierra = false;
+		return;
 	}
 	//buscará los siguientes caracteeres
 	// caracter_fin_linea = ';'
 	// caracter_nodo_abre = '{'
 	// caracter_nodo_cierra = '}'
-	for(std::string::iterator it = caracteres.begin(); it != caracteres.end(); it++){
-		if( *it==';'){
-			caracter_fin_linea = true;
+	try{
+		for (char c : caracteres) {
+			switch (c) {
+				case ';':
+					if (caracter_fin_linea) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+					caracter_fin_linea = true;
+					break;
+				case '{':
+					if (caracter_nodo_abre) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+					caracter_nodo_abre = true;
+					break;
+				case '}':
+					if (caracter_nodo_cierra) throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
+					caracter_nodo_cierra = true;
+					break;
+			}
 		}
-		if( *it=='{'){
-			caracter_nodo_abre = true;
-		}
-		if(*it=='}'){
-			caracter_nodo_cierra = true;
-		}
+	}
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		return;
 	}
 	return;
 }
@@ -53,7 +65,7 @@ void LineaTopDown::analizaSintaxis(){
 	cuentaDentado();
 	buscaCaracteresImportantes();
 	//si no tiene ningún caracter importante, no hay nada más que analizar
-	if((caracter_fin_linea&&caracter_nodo_abre&&caracter_nodo_cierra) == false){
+	if(booleanosActivos == 0){
 		return;
 	}
 	try{
@@ -101,12 +113,10 @@ LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
 	caracter_fin_linea = l.caracter_fin_linea;
 	caracter_nodo_abre = l.caracter_nodo_abre;
 	caracter_nodo_cierra = l.caracter_nodo_cierra;
-	analizaSintaxis();
 	return *this;
 }
 std::istream& operator>>(std::istream&is, LineaTopDown&l){
 	is >> l.caracteres;
-	l.analizaSintaxis();
 	return is;
 }
 std::ostream& operator<< (std::ostream& os, const LineaTopDown& l){
