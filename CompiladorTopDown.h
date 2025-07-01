@@ -8,8 +8,8 @@
 #include "TopDown.h"
 class CompiladorTopDown{
 	private:
-		ArchivoTopDown ArchivoTD;
-		Topdown TD;
+		ArchivoTopDown archivoTD;
+		Topdown topdown;
 	public:
 		//constructor
 		CompiladorTopDown();
@@ -19,8 +19,10 @@ class CompiladorTopDown{
 		void leeArchivoTD();
 		//método para buscar el título del TD
 		int buscaTituloTP();
-		//toma el archivo y busca que todas las lineas luego del título tengan por lo menos 1 tab
+		//toma el archivo y busca que todas las lineas luego del título tengan por lo menos 1 tabulador
 		int revisaCorrectoDentado();
+		//método para generar todos los nodos automáticamente y guardarlos en el topdown
+		int generaNodos();
 		//método para realizar una sola rutina de compilación
 		//este es el método que engloba todo
 		void compilar();

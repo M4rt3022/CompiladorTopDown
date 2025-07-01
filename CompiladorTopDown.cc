@@ -3,16 +3,13 @@
 CompiladorTopDown::CompiladorTopDown(){}
 CompiladorTopDown::~CompiladorTopDown(){}
 void CompiladorTopDown::leeArchivoTD(){
-	ArchivoTD.leeDesdeArchivo();
+	archivoTD.leeDesdeArchivo();
 }
 //el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
 int CompiladorTopDown::revisaCorrectoDentado(){
-	int cantidadLineas = ArchivoTD.getCantidadLineas();
-	if (cantidadLineas == 0){
-		return 1;
-	}
+	int cantidadLineas = archivoTD.getCantidadLineas();
 	for(int i = 1; i < cantidadLineas; i++){
-		if(ArchivoTD.getDentadoLinea(i)<1){
+		if(archivoTD.getDentadoLinea(i)<1){
 			return 1;
 		}
 	}
@@ -20,11 +17,11 @@ int CompiladorTopDown::revisaCorrectoDentado(){
 }
 int CompiladorTopDown::buscaTituloTP(){
 	std::string titulo;
-	ArchivoTD.getContenidoLinea(0,titulo); 
+	archivoTD.getContenidoLinea(0,titulo); 
 	if (titulo.empty()){
 		return 1;
 	}
-	//acá debería guardar el primer nodo
+	topdown.agregaNodo("","", titulo);
 	return 0;
 }
 void CompiladorTopDown::compilar(){
@@ -32,7 +29,7 @@ void CompiladorTopDown::compilar(){
 		//carga los datos del topdown
 		leeArchivoTD();
 		//analiza si algo dentro del Archivo ha salido mal
-		if(ArchivoTD.getError()){
+		if(archivoTD.getError()){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD));
 		}
 		//busca el título del topdown y lo guarda en un nodo
@@ -40,9 +37,13 @@ void CompiladorTopDown::compilar(){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
 		//busca el título del archivo a guardar
+		if(buscaTituloTP()==1){
+			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
+		}
+
 
 	}
 	catch(const ErrorHandler& error){
-		std::cerr << "[ERROR]: " << error.what() << ", no seguirá compilando" << std::endl;
+		std::cerr << "[ERROR]: " << error.what() << " se detiene compilación." << std::endl;
 	}
 }

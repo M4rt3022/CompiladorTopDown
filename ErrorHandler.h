@@ -18,6 +18,7 @@ enum class TipoError {
 	ERROR_TOPDOWN_ARCHIVO_VACÍO,
 	ERROR_COMPILADOR_ERROR_ARCHIVOTD,
 	ERROR_COMPILADOR_ERROR_DENTADO,
+	ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN
 };
 //clase que busca el error al ser inicializada y devuelve un mensaje en consecuencia
 class ErrorHandler : public std::exception
@@ -53,6 +54,8 @@ class ErrorHandler : public std::exception
 					return "Algo salió mal en la lectura del topdown";
 				case(TipoError::ERROR_COMPILADOR_ERROR_DENTADO):
 					return "El dentado que tiene el archivo no es correcto";
+				case(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN):
+					return "El titulo del topdown no pudo obtenerse correctamente";
 				default:
 					return "Error desconocido";
 			}
