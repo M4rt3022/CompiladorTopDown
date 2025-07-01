@@ -6,7 +6,7 @@
 Topdown::Topdown(){}
 Topdown::~Topdown(){}
 void Topdown::guardaTopDown(){
-	std::ofstream archivo;
+	std::ofstream archivo("topdown-formateado");
 	std::string auxiliar;
 	try{
 		if(!archivo){
@@ -17,7 +17,7 @@ void Topdown::guardaTopDown(){
 			//no hay nada que guardar
 			throw(ErrorHandler(TipoError::ERROR_TOPDOWN_ARCHIVO_VACÍO));
 		}
-		for(int i = 0 ; i < nodos.size() ;i++){
+		for(int i = 0 ; i < static_cast<int>(nodos.size()) ;i++){
 			nodos[i].guardarEnString(auxiliar);
 			archivo << auxiliar << std::endl;
 		}
@@ -29,15 +29,6 @@ void Topdown::guardaTopDown(){
 		}
 		return;
 	}
-}
-int Topdown::devuelvePosicionNodo(const std::string& orden){
-	int ordenEnVector;
-	for(ordenEnVector = 0; ordenEnVector < nodos.size();ordenEnVector++){
-		if(nodos[ordenEnVector].getOrden() == orden){
-			return ordenEnVector;
-		}
-	}
-	return -1;
 }
 void Topdown::agregaNodo(const std::string& o, const std::string& oP, const std::string& cont){
 	//tal vez debería revisar algo más acá, no sé

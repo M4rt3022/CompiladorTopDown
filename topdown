@@ -1,4 +1,4 @@
-problema 62;;
+problema 62;
 	leer string;
 	calcular la cantidad
 	de vocales en el string;

@@ -16,7 +16,7 @@ int ArchivoTopDown::getCantidadLineas(){
 }
 int ArchivoTopDown::getDentadoLinea(const int& orden){
 	try{
-		if(orden>LineasArchivo.size()){
+		if( orden > static_cast<int>(LineasArchivo.size())){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		return (LineasArchivo[orden].getDentado());
@@ -69,7 +69,7 @@ std::string ArchivoTopDown::getLinea(const int& numero){
 }
 void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 	try{
-		if(orden > LineasArchivo.size()){
+		if( orden > static_cast<int>(LineasArchivo.size()) ){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		LineasArchivo[orden].obtieneContenido(salida);

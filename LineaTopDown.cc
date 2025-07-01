@@ -1,4 +1,4 @@
-#include "LineaTopDown.h != '\n'"
+#include "LineaTopDown.h"
 #include <iostream>
 #include <istream>
 #include <string>
@@ -135,7 +135,6 @@ std::ostream& operator<< (std::ostream& os, const LineaTopDown& l){
 }
 //método que devuelve un string de lo que tiene la línea antes de un caracter importante, si está bien escrita
 void LineaTopDown::obtieneContenido(std::string& salida){
-	char charAuxiliar;
 	try{
 		if(!linea_bien_escrita){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_MAL_ESCRITA));

@@ -23,8 +23,9 @@ class CompiladorTopDown{
 		int revisaCorrectoDentado();
 		//método para generar todos los nodos automáticamente y guardarlos en el topdown
 		int generaNodos();
-		//método para realizar una sola rutina de compilación
-		//este es el método que engloba todo
+		//método para tomar todo lo guardado en topdown y almacenarlo en un archivo de texto formateado
+		void guardaEnArchivo();
+		//método que engloba todos los métodos anteriores en orden
 		void compilar();
 };
 #endif
