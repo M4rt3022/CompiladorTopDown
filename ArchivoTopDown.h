@@ -25,5 +25,8 @@ class ArchivoTopDown{
 		int getDentadoLinea(const int& orden);
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo
 		void leeDesdeArchivo();
+		//método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea
+		// 1 si es verdadero, 0 si es falso y -1 si hubo un error
+		int getBoolLinea(const int & orden,const char& caracter);
 };
 #endif

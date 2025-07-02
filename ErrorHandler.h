@@ -14,6 +14,7 @@ enum class TipoError {
 	ERROR_LINEA_INEXISTENTE, 
 	ERROR_LINEA_ARCHIVO_VACÍO,
 	ERROR_LINEA_MAL_ESCRITA,
+	ERROR_LINEA_BOOL_INEXISTENTE,
 	ERROR_TOPDOWN_ABRIR_ARCHIVO,
 	ERROR_TOPDOWN_ARCHIVO_VACÍO,
 	ERROR_COMPILADOR_ERROR_ARCHIVOTD,
@@ -46,6 +47,8 @@ class ErrorHandler : public std::exception
 					return "El archivo abierto se encuentra vacío";
 				case(TipoError::ERROR_LINEA_MAL_ESCRITA):
 					return "La linea que intenta obtener está mal escrita";
+				case(TipoError::ERROR_LINEA_BOOL_INEXISTENTE):
+					return "El bool que se busca en la línea no existe";
 				case(TipoError::ERROR_TOPDOWN_ABRIR_ARCHIVO):
 					return "No se pudo abrir el archivo para guardar el topdown";
 				case(TipoError::ERROR_TOPDOWN_ARCHIVO_VACÍO):

@@ -141,10 +141,10 @@ void LineaTopDown::obtieneContenido(std::string& salida){
 		}
 		std::string::const_iterator it = caracteres.begin();
 		while(it != caracteres.end() && ((*it) == ' ' || (*it) == '\t' )) ++it; //método zabalero para llegar a la parte con palabras de un string
-		while(it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}' && (*it) != '\n'){
+		for(;it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}'; it++){
 			salida += *it;
-			++it;
 		}
+		std::cout << "la salida: " << salida << std::endl;
 		return;
 	}
 	catch(const ErrorHandler& error){

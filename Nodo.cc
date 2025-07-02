@@ -5,7 +5,7 @@ void Nodo::obtenerOrden(){
 	std::string ordenFormateado;
 	if(ordenPadre.empty()){
 		//significa que es el primer nodo (título o se usó el constructor por defecto)
-		orden = '0';
+		orden = "";
 		return;
 	}
 	orden = ordenPadre + orden;
@@ -48,12 +48,12 @@ bool Nodo::operator==(const Nodo& n){
 	return false;
 }
 std::ostream& operator<< (std::ostream& os, const Nodo& n){
-	os << "orden(" << n.getOrden() << ")."
-	<< "ordenPadre(" << n.getOrdenPadre() << ")."
+	os << "orden(" << n.getOrden() << ")"
+	<< "ordenPadre(" << n.getOrdenPadre() << ")"
 	<< "contenido(" << n.getContenido() << ");";
 	return os;
 }
 void Nodo::guardarEnString(std::string & s){
-	s += std::string("orden(") + getOrden() + std::string(").") + std::string("ordenPadre(.") + getOrdenPadre() + std::string(").")
+	s += std::string("orden(") + getOrden() + std::string(")") + std::string("ordenPadre(") + getOrdenPadre() + std::string(")")
 		+ std::string("contenido(") + getContenido() + std::string(");") ;
 }

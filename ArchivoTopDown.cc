@@ -12,7 +12,7 @@ ArchivoTopDown::ArchivoTopDown(){
 ArchivoTopDown::~ArchivoTopDown(){
 }
 int ArchivoTopDown::getCantidadLineas(){
-	return LineasArchivo.size();
+	return (static_cast<int>(LineasArchivo.size()));
 }
 int ArchivoTopDown::getDentadoLinea(const int& orden){
 	try{
@@ -30,32 +30,25 @@ void ArchivoTopDown::leeDesdeArchivo(){
 	int cantidadLineas = 0;
 	std::string auxiliar;
 	std::ifstream entrada("topdown");
-
 	try {
 		if (!entrada) {
 		    throw(ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
 		}
-
 		// Contar líneas válidas
 		while (std::getline(entrada, auxiliar)) {
 		    cantidadLineas++;
 		}
-
 		if (cantidadLineas == 0) {
 		    throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
-
 		LineasArchivo.resize(cantidadLineas);
-
 		// Volver a leer desde el principio
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
-
 		for (int i = 0; i < cantidadLineas; ++i) {
 		    std::getline(entrada, auxiliar);
 		    LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
-
 		entrada.close();
 	}
 	catch (const ErrorHandler& error) {
@@ -73,11 +66,34 @@ void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		LineasArchivo[orden].obtieneContenido(salida);
+		std::cout << "la salida es: " << salida << std::endl;
 		return;
 	}
 	catch(const ErrorHandler& error){
 		salida = "";
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return;
+	}
+}
+int ArchivoTopDown::getBoolLinea(const int& orden, const char& caracter){
+	try{
+		if( orden > static_cast<int>(LineasArchivo.size()) ){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
+		}
+		//busca que bool debe retornar y lo devuelve 
+		if(caracter == ';'){
+			return (static_cast<int>(LineasArchivo[orden].getFinLinea()));
+		}
+		if(caracter == '{'){
+			return (static_cast<int>(LineasArchivo[orden].getNodoAbre()));
+		}
+		if(caracter == '}'){
+			return (static_cast<int>(LineasArchivo[orden].getNodoCierra()));
+		}
+		throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
+	}
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		return -1;
 	}
 }
