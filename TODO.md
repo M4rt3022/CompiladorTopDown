@@ -5,7 +5,7 @@
     - [x] Añadir método archivoTopDown para obtener numero de Comienzo de nodo
     - [x] Adaptar método cuentaHijos para que utilice los comienzos de nodos
     - [x] Definir función NombraHijos de Compilador
-    - [ ] Quitar ordenPadre de nodos, es inútil, no lo necesita cada nodo
+    - [x] Quitar ordenPadre de nodos, es inútil, no lo necesita cada nodo
     - [ ] Testear función NombraHijos de Compilador
     - [ ] Buscar como sería posible agregar nodos que engloben a otros nodos
     - [ ] Dejar bien ordenadas las definiciones de funciones

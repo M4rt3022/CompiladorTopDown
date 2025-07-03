@@ -30,8 +30,8 @@ void Topdown::guardaTopDown(){
 		return;
 	}
 }
-void Topdown::agregaNodo(const std::string& o, const std::string& oP, const std::string& cont){
+void Topdown::agregaNodo(const std::string& o, const std::string& cont){
 	//tal vez debería revisar algo más acá, no sé
-	nodos.emplace_back(o,oP,cont);
+	nodos.emplace_back(o,cont);
 	return;
 }

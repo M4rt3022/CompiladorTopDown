@@ -7,14 +7,11 @@
 class Nodo{
 	private:
 		std::string orden;
-		std::string ordenPadre;
 		std::string contenido;
-		//método para calcular el orden del nodo en base al del padre y si es hijo o no
-		void obtenerOrden();
 	public:
 		//constructores
 		Nodo();
-		Nodo(const std::string& o, const std::string& oP, const std::string& cont);
+		Nodo(const std::string& o, const std::string& cont);
 		//destructor
 		~Nodo();
 		//métodos set
@@ -23,7 +20,6 @@ class Nodo{
 		void setContenido(const std::string& cont);
 		//métodos get
 		std::string getOrden(void)const { return orden;}
-		std::string getOrdenPadre(void)const { return ordenPadre;}
 		std::string getContenido(void) const {return contenido;}
 		//sobrecarga operadores
 		Nodo& operator=(const Nodo& n);

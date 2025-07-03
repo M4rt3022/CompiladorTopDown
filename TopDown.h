@@ -20,6 +20,6 @@ class Topdown{
 		//metodo para guardar topdown en un archivo
 		void guardaTopDown();
 		//método que guarda un nodo con argumentos en el vector
-		void agregaNodo(const std::string& o, const std::string& oP, const std::string& cont);
+		void agregaNodo(const std::string& o, const std::string& cont);
 };
 #endif

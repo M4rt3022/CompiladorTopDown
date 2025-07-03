@@ -29,7 +29,7 @@ int CompiladorTopDown::buscaTituloTP(){
 		return -1;
 	}
 	//crea nodo con todo el contenido almacenado
-	topdown.agregaNodo("","",titulo);
+	topdown.agregaNodo("",titulo);
 	return ordenDesde;
 }
 void CompiladorTopDown::guardaEnArchivo(){
@@ -95,7 +95,7 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 		stringAuxiliar = juntaContenido(dondeComienzan[i],';');
 		//lo nombra como nodoPadre + . + i y le pone el nombre de su padre
 		nombreAuxiliar = ordenPadre + "." + std::to_string(i);
-		topdown.agregaNodo(nombreAuxiliar,ordenPadre,stringAuxiliar);
+		topdown.agregaNodo(nombreAuxiliar,stringAuxiliar);
 		//luego, se le pide que nombre a sus hijos
 		nombraHijos(archivoTD.getComienzoNodo(i),nombreAuxiliar);
 	}
