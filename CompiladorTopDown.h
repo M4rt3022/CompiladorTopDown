@@ -25,8 +25,8 @@ class CompiladorTopDown{
 		std::string& juntaContenido(int & orden,const char& caracter);
 		//método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 		int cuentaHijos(const int&orden);
-		//método para generar todos los nodos automáticamente y guardarlos en el topdown
-		int generaNodos(int & desde);
+		//método que cuentaHijos y les otorga sus nombres en base a el nombre del padre
+		void nombraHijos(const int &numLinea,const std::string& ordenPadre);
 		//método para tomar todo lo guardado en topdown y almacenarlo en un archivo de texto formateado
 		void guardaEnArchivo();
 		//método que engloba todos los métodos anteriores en orden

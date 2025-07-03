@@ -1,5 +1,7 @@
 #include "CompiladorTopDown.h"
 #include "ErrorHandler.h"
+#include <string>
+#include <vector>
 CompiladorTopDown::CompiladorTopDown(){}
 CompiladorTopDown::~CompiladorTopDown(){}
 void CompiladorTopDown::leeArchivoTD(){
@@ -70,10 +72,41 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	}
 	return cantHijos;
 }
-//método para generar todos los nodos automáticamente y guardarlos en el topdown
-int CompiladorTopDown::generaNodos(int & desde){
-	//voy a diseñar esto como si no existieran nodos que abarcan otros nodos
-	return desde;
+void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
+	int cantidadHijos = cuentaHijos(numLinea);
+	std::vector<int> ordenesHijos;
+	if(cantidadHijos == 0){
+		return;
+	}
+	ordenesHijos.reserve(cantidadHijos);
+	int i = 0, j = numLinea;
+	int tabsPadre = archivoTD.getDentadoLinea(numLinea);
+	if (numLinea>archivoTD.getCantidadLineas()){
+		return;
+	}
+	//guarda en el vector los números de líneas donde se encuentran los principios de contenidos de sus nodos hijos
+	for(;i<cantidadHijos&&j<archivoTD.getCantidadLineas();j++){
+		if(tabsPadre+1==archivoTD.getDentadoLinea(j)){
+			ordenesHijos.push_back(j);
+			//se saltea todos los espacios hasta que encuentre donde termina el hijo
+			while(0==archivoTD.getBoolLinea(j, ';')){
+				j++;
+			}
+		}
+	}
+	//para cada hijo
+	std::string contenidoAuxiliar;
+	std::string ordenAuxiliar;
+	for(i = 0; i < cantidadHijos;i++){
+		ordenAuxiliar = "";
+		contenidoAuxiliar = "";
+		archivoTD.getContenidoLinea(ordenesHijos[i],contenidoAuxiliar);
+		//ahora es donde crea el hijo y le asigna todo
+		ordenAuxiliar = ordenPadre + "." + std::to_string(i+1);		//esto es para que le ponga 1.1, 1.2, 1.3 y así
+		topdown.agregaNodo(ordenAuxiliar,ordenPadre,contenidoAuxiliar);
+		//la mama de la mamá de la mamá de la mamá
+		nombraHijos(ordenesHijos[j],ordenAuxiliar);
+	}
 }
 void CompiladorTopDown::compilar(){
 	std::cout << "[CompiladorTopDown]: Compilando topdown ..." << std::endl;
