@@ -23,6 +23,8 @@ class CompiladorTopDown{
 		int revisaCorrectoDentado(int & desde);
 		//método que toma desde un número de línea en específico y junta su contenido hasta encontrar un caracter, utiliza el orden enviado como referencia y lo modifica
 		std::string& juntaContenido(int & orden,const char& caracter);
+		//método que cuenta cuantos hijos tiene un nodo y lo devuelve;
+		int cuentaHijos(const int&orden);
 		//método para generar todos los nodos automáticamente y guardarlos en el topdown
 		int generaNodos(int & desde);
 		//método para tomar todo lo guardado en topdown y almacenarlo en un archivo de texto formateado

@@ -54,6 +54,22 @@ std::string& CompiladorTopDown::juntaContenido(int & orden,const char& caracter)
 
 	return stringAuxiliar;
 }
+//método que cuenta cuantos hijos tiene un nodo y lo devuelve;
+int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
+	int cantHijos = 0;
+	if(numeroLinea> archivoTD.getCantidadLineas()){
+		return -1;
+	}
+	int numLineaAux = numeroLinea;
+	int cantidadTabs = archivoTD.getDentadoLinea(numLineaAux);
+	numLineaAux++;
+	for(;cantidadTabs!=archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
+		if(cantidadTabs+1==archivoTD.getDentadoLinea(numLineaAux)&&archivoTD.getBoolLinea(numLineaAux, ';')){
+			cantHijos++;
+		}
+	}
+	return cantHijos;
+}
 //método para generar todos los nodos automáticamente y guardarlos en el topdown
 int CompiladorTopDown::generaNodos(int & desde){
 	//voy a diseñar esto como si no existieran nodos que abarcan otros nodos
@@ -77,10 +93,12 @@ void CompiladorTopDown::compilar(){
 		}
 
 		std::cout << "el titulo termina en la línea: "<< ordenAuxiliar << std::endl;
+		std::cout << "la cantidad de hijos del título son: " << cuentaHijos(ordenAuxiliar) << std::endl;
+
 		if(revisaCorrectoDentado(++ordenAuxiliar)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
-
+		
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();
 
