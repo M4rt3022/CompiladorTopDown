@@ -39,12 +39,10 @@ void CompiladorTopDown::guardaEnArchivo(){
 std::string& CompiladorTopDown::juntaContenido(int & numLinea,const char& caracter){
 	static std::string stringAuxiliar = "";
 	int dentado;
-
 	//primero debo revisar que el orden exista
 	if(numLinea > archivoTD.getCantidadLineas()){
 		return stringAuxiliar;
 	} 
-
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
 	dentado = archivoTD.getDentadoLinea(numLinea);
 	for(;dentado==archivoTD.getDentadoLinea(numLinea);numLinea++){
@@ -62,11 +60,10 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	if(numeroLinea> archivoTD.getCantidadLineas()){
 		return -1;
 	}
-	int numLineaAux = numeroLinea;
-	int cantidadTabs = archivoTD.getDentadoLinea(numLineaAux);
-	numLineaAux++;
-	for(;cantidadTabs!=archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
-		if(cantidadTabs+1==archivoTD.getDentadoLinea(numLineaAux)&&archivoTD.getBoolLinea(numLineaAux, ';')){
+	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
+	for(int i=0;i < archivoTD.getCantidadNodos();i++){
+		//si la linea donde comienza un nodo, tiene el mismo numero de tabs+1 que donde comencé, es un hijo
+		if(cantidadTabs+1==archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i))){
 			cantHijos++;
 		}
 	}
@@ -127,7 +124,7 @@ void CompiladorTopDown::compilar(){
 
 		//solo para checkear
 		archivoTD.imprimeComienzosNodos();
-
+		std::cout << "la cantidad de hijos que tiene el padre son: " << cuentaHijos(0) << std::endl;
 		if(revisaCorrectoDentado(++numLineaAux)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}

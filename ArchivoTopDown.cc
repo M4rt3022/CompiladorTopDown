@@ -30,6 +30,17 @@ ArchivoTopDown::~ArchivoTopDown(){
 int ArchivoTopDown::getCantidadLineas(){
 	return (static_cast<int>(LineasArchivo.size()));
 }
+//método que cuenta la cantidad de comienzos de nodos que tiene y lo devuelve
+int ArchivoTopDown::getCantidadNodos(){
+	return (static_cast<int>(ComienzoNodos.size()));
+}
+//devuelve el valor de un ComienzoNodos
+int ArchivoTopDown::getComienzoNodo(const int& numero){
+	if(numero>getCantidadNodos()){
+		return -1;
+	}
+	return(ComienzoNodos[numero]);
+}
 int ArchivoTopDown::getDentadoLinea(const int& orden){
 	try{
 		if( orden > static_cast<int>(LineasArchivo.size())){

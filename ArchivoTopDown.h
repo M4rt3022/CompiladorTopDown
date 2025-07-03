@@ -31,6 +31,10 @@ class ArchivoTopDown{
 		int getDentadoLinea(const int& orden);
 		//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'
 		void leerLinea(std::ifstream& archivo, std::string& salida);
+		//devuelve el valor de un ComienzoNodos
+		int getComienzoNodo(const int& numero);
+		//método que cuenta la cantidad de comienzos de nodos que tiene y lo devuelve
+		int getCantidadNodos();
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo
 		void leeDesdeArchivo();
 		//método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea
