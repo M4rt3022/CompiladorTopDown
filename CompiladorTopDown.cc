@@ -10,6 +10,7 @@ void CompiladorTopDown::leeArchivoTD(){
 int CompiladorTopDown::revisaCorrectoDentado(int& desde){
 	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
 	int cantidadLineas = archivoTD.getCantidadLineas();
+	std::cout << "se analizará el dentado del archivo desde el orden de línea: " << desde << std::endl;
 	for(;desde<cantidadLineas;desde++){
 		if(archivoTD.getDentadoLinea(desde)<1){
 			return 1;
@@ -27,7 +28,7 @@ int CompiladorTopDown::buscaTituloTP(){
 	}
 	//crea nodo con todo el contenido almacenado
 	topdown.agregaNodo("","",titulo);
-	return ordenDesde++;
+	return ordenDesde;
 }
 void CompiladorTopDown::guardaEnArchivo(){
 	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
@@ -36,10 +37,12 @@ void CompiladorTopDown::guardaEnArchivo(){
 std::string& CompiladorTopDown::juntaContenido(int & orden,const char& caracter){
 	static std::string stringAuxiliar = "";
 	int dentado;
+
 	//primero debo revisar que el orden exista
 	if(orden > archivoTD.getCantidadLineas()){
 		return stringAuxiliar;
 	} 
+
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
 	dentado = archivoTD.getDentadoLinea(orden);
 	for(;dentado==archivoTD.getDentadoLinea(orden);orden++){
@@ -48,6 +51,7 @@ std::string& CompiladorTopDown::juntaContenido(int & orden,const char& caracter)
 			break;
 		}
 	}
+
 	return stringAuxiliar;
 }
 //método para generar todos los nodos automáticamente y guardarlos en el topdown
@@ -60,22 +64,26 @@ void CompiladorTopDown::compilar(){
 	try{
 		//carga los datos del topdown
 		leeArchivoTD();
+
 		//analiza si algo dentro del Archivo ha salido mal
 		if(archivoTD.getError()){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD));
 		}
+
 		//busca el título del archivo a guardar y guarda en ordenAuxiliar, la línea donde termina el título
 		int ordenAuxiliar = buscaTituloTP();
 		if(ordenAuxiliar == -1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
-		ordenAuxiliar++;
-		std::cout << "La  línea que sigue al título es la línea: " << ordenAuxiliar << std::endl;
-		if(revisaCorrectoDentado(ordenAuxiliar)==1){
+
+		std::cout << "el titulo termina en la línea: "<< ordenAuxiliar << std::endl;
+		if(revisaCorrectoDentado(++ordenAuxiliar)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
+
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();
+
 		std::cout << "[CompiladorTopDown]: Compilación Completa." << std::endl;
 	}
 	catch(const ErrorHandler& error){

@@ -22,7 +22,7 @@ int ArchivoTopDown::getDentadoLinea(const int& orden){
 		return (LineasArchivo[orden].getDentado());
 	}
 	catch(const ErrorHandler& error){
-		std::cout << "[ERROR]: " << error.what() << std::endl;
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return -1;
 	}
 }
@@ -45,11 +45,8 @@ void ArchivoTopDown::leeDesdeArchivo(){
 		// Volver a leer desde el principio
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
-		std::cout << "la candidad de líneas del archivo es " << cantidadLineas << std::endl;
 		for (int i = 0; i < cantidadLineas; ++i) {
-			//método propio para guardar en un string contanto del '\n' si es el último
 			leerLinea(entrada, auxiliar);
-			std::cout << "la línea leída dice: " << auxiliar << std::endl;
 			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
 		entrada.close();
@@ -110,10 +107,6 @@ void ArchivoTopDown::leerLinea(std::ifstream& archivo, std::string& salida){
 	while(!archivo.eof() && c != '\n'){
 		salida += c;
 		archivo.get(c);
-		if (c == ';' || c == '{' || c == '}'){
-			salida += c;
-			break;
-		}
 	}
 	if(c == '\n'){
 		salida += c;

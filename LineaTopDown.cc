@@ -4,18 +4,14 @@
 #include <string>
 #include "ErrorHandler.h" // clase personalizada para facilitar el manejo de excepciones en el programa
 void LineaTopDown::cuentaDentado(){
-	bool primerLetra = false;// bandera para marcar cuando encuentre la primer letra de la línea
 	int cantidadDentado = 0;
 	if (caracteres.empty()){ // si no tiene caracteres, no tiene dentado
 		numeroDentado = 0;
 		return;
 	}
 	//se recorre el string en búsqueda de un caracter de dentado, en este caso '\t'
-	for (std::string::iterator it = caracteres.begin(); it != caracteres.end()&&primerLetra==false;it++){
-		if(*it=='\t'){
-			cantidadDentado++;
-		}
-		primerLetra = true;
+	for (std::string::iterator it = caracteres.begin(); it != caracteres.end() && ((*it)==' '||(*it)=='\t');it++){
+		cantidadDentado++;
 	}
 	numeroDentado = cantidadDentado;
 	return;
@@ -140,7 +136,7 @@ void LineaTopDown::obtieneContenido(std::string& salida){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_MAL_ESCRITA));
 		}
 		std::string::const_iterator it = caracteres.begin();
-		while(it != caracteres.end() && ((*it) == ' ' || (*it) == '\t' )) ++it; //método zabalero para llegar a la parte con palabras de un string
+		while(it != caracteres.end() && ((*it) == ' ' || (*it) == '\t' )) ++it;
 		for(;it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}'; it++){
 			salida += *it;
 			if((*it)=='\n'){
