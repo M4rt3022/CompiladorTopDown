@@ -23,6 +23,8 @@ class ArchivoTopDown{
 		void getContenidoLinea (const int& orden,std::string& salida);
 		//Devuelve la cantidad de tabuladores de la linea que se encuentra en orden
 		int getDentadoLinea(const int& orden);
+		//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'
+		void leerLinea(std::ifstream& archivo, std::string& salida);
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo
 		void leeDesdeArchivo();
 		//método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea

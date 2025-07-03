@@ -32,22 +32,25 @@ void ArchivoTopDown::leeDesdeArchivo(){
 	std::ifstream entrada("topdown");
 	try {
 		if (!entrada) {
-		    throw(ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
+			throw(ErrorHandler(TipoError::ERROR_LINEA_ABRIR_ARCHIVO));
 		}
 		// Contar líneas válidas
 		while (std::getline(entrada, auxiliar)) {
-		    cantidadLineas++;
+			cantidadLineas++;
 		}
 		if (cantidadLineas == 0) {
-		    throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
+			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
 		LineasArchivo.resize(cantidadLineas);
 		// Volver a leer desde el principio
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
+		std::cout << "la candidad de líneas del archivo es " << cantidadLineas << std::endl;
 		for (int i = 0; i < cantidadLineas; ++i) {
-		    std::getline(entrada, auxiliar);
-		    LineasArchivo[i] = LineaTopDown(auxiliar);
+			//método propio para guardar en un string contanto del '\n' si es el último
+			leerLinea(entrada, auxiliar);
+			std::cout << "la línea leída dice: " << auxiliar << std::endl;
+			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
 		entrada.close();
 	}
@@ -66,7 +69,6 @@ void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		LineasArchivo[orden].obtieneContenido(salida);
-		std::cout << "la salida es: " << salida << std::endl;
 		return;
 	}
 	catch(const ErrorHandler& error){
@@ -96,4 +98,26 @@ int ArchivoTopDown::getBoolLinea(const int& orden, const char& caracter){
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return -1;
 	}
+}
+//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'
+void ArchivoTopDown::leerLinea(std::ifstream& archivo, std::string& salida){
+	if(!archivo){
+		return;
+	}
+	salida = "";
+	char c;
+	archivo.get(c);
+	while(!archivo.eof() && c != '\n'){
+		salida += c;
+		archivo.get(c);
+		if (c == ';' || c == '{' || c == '}'){
+			salida += c;
+			break;
+		}
+	}
+	if(c == '\n'){
+		salida += c;
+		return;
+	}
+	return;
 }

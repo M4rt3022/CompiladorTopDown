@@ -27,7 +27,7 @@ int CompiladorTopDown::buscaTituloTP(){
 	}
 	//crea nodo con todo el contenido almacenado
 	topdown.agregaNodo("","",titulo);
-	return ordenDesde;
+	return ordenDesde++;
 }
 void CompiladorTopDown::guardaEnArchivo(){
 	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
@@ -42,9 +42,7 @@ std::string& CompiladorTopDown::juntaContenido(int & orden,const char& caracter)
 	} 
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
 	dentado = archivoTD.getDentadoLinea(orden);
-	std::cout << "valor de dentado: " << dentado << std::endl;
 	for(;dentado==archivoTD.getDentadoLinea(orden);orden++){
-		std::cout << "valor de orden: " << orden << std::endl;
 		archivoTD.getContenidoLinea(orden, stringAuxiliar);
 		if(archivoTD.getBoolLinea(orden,caracter)){
 			break;
