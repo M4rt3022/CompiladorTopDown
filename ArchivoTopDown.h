@@ -9,7 +9,10 @@
 class ArchivoTopDown{
 	private:
 		std::vector<LineaTopDown> LineasArchivo;
+		std::vector<int> ComienzoNodos;
 		bool ocurrio_un_error;
+		//método interno, guarda donde comienza cada nodo en el vector
+		void asignarComienzosNodos();
 	public:
 		//constructor
 		ArchivoTopDown();
@@ -21,6 +24,9 @@ class ArchivoTopDown{
 		bool getError(void)const{return ocurrio_un_error;}
 		//método que llama a getContenido y lo devuelve
 		void getContenidoLinea (const int& orden,std::string& salida);
+		//ELIMINAR ESTO LUEGO
+		void imprimeComienzosNodos();
+		//ELIMINAR ESTO LUEGO
 		//Devuelve la cantidad de tabuladores de la linea que se encuentra en orden
 		int getDentadoLinea(const int& orden);
 		//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'

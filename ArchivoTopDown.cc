@@ -5,6 +5,22 @@
 #include <vector>
 #include "ErrorHandler.h"
 #include "ArchivoTopDown.h"
+//método interno, guarda donde comienza cada nodo en el vector
+void ArchivoTopDown::asignarComienzosNodos(){
+	if(getCantidadLineas()==0){
+		return;
+	}
+	int i = 0;
+	int dentadoAuxiliar;
+	for(;i<getCantidadLineas();i++){
+		ComienzoNodos.push_back(i);
+		dentadoAuxiliar = LineasArchivo[i].getDentado();
+		//salteo lo que es el mismo nodo
+		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getFinLinea()){
+			i++;
+		}
+	}
+}
 ArchivoTopDown::ArchivoTopDown(){
 	ocurrio_un_error = false;
 	LineasArchivo.reserve(10);
@@ -49,12 +65,23 @@ void ArchivoTopDown::leeDesdeArchivo(){
 			leerLinea(entrada, auxiliar);
 			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
+		std::cout << "archivo leído, ahora se buscarán los comienzos de cada nodo" << std::endl;
+		//busca donde comienza cada nodo
+		asignarComienzosNodos();
 		entrada.close();
 	}
 	catch (const ErrorHandler& error) {
 		entrada.close();
 		ocurrio_un_error = true;
 	}
+}
+void ArchivoTopDown::imprimeComienzosNodos(){
+	int cantidad = static_cast<int>(ComienzoNodos.size());
+	std::cout << "se enunciarán las posiciones de líneas donde comienzan cada nodo en el archivo" << std::endl;
+	for(int i = 0;i < cantidad; i++){
+		std::cout << ComienzoNodos[i] << std::endl;
+	}
+	return;
 }
 std::string ArchivoTopDown::getLinea(const int& numero){
 	//acá debería revisar que sea un número válido

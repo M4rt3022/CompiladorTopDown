@@ -125,8 +125,8 @@ void CompiladorTopDown::compilar(){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
 
-		std::cout << "el titulo termina en la línea: "<< ordenAuxiliar << std::endl;
-		std::cout << "la cantidad de hijos del título son: " << cuentaHijos(ordenAuxiliar) << std::endl;
+		//solo para checkear
+		archivoTD.imprimeComienzosNodos();
 
 		if(revisaCorrectoDentado(++numLineaAux)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
