@@ -36,20 +36,20 @@ void CompiladorTopDown::guardaEnArchivo(){
 	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
 	topdown.guardaTopDown();
 }
-std::string& CompiladorTopDown::juntaContenido(int & orden,const char& caracter){
+std::string& CompiladorTopDown::juntaContenido(int & numLinea,const char& caracter){
 	static std::string stringAuxiliar = "";
 	int dentado;
 
 	//primero debo revisar que el orden exista
-	if(orden > archivoTD.getCantidadLineas()){
+	if(numLinea > archivoTD.getCantidadLineas()){
 		return stringAuxiliar;
 	} 
 
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
-	dentado = archivoTD.getDentadoLinea(orden);
-	for(;dentado==archivoTD.getDentadoLinea(orden);orden++){
-		archivoTD.getContenidoLinea(orden, stringAuxiliar);
-		if(archivoTD.getBoolLinea(orden,caracter)){
+	dentado = archivoTD.getDentadoLinea(numLinea);
+	for(;dentado==archivoTD.getDentadoLinea(numLinea);numLinea++){
+		archivoTD.getContenidoLinea(numLinea, stringAuxiliar);
+		if(archivoTD.getBoolLinea(numLinea,caracter)){
 			break;
 		}
 	}
@@ -120,15 +120,15 @@ void CompiladorTopDown::compilar(){
 		}
 
 		//busca el título del archivo a guardar y guarda en ordenAuxiliar, la línea donde termina el título
-		int ordenAuxiliar = buscaTituloTP();
-		if(ordenAuxiliar == -1){
+		int numLineaAux = buscaTituloTP();
+		if(numLineaAux == -1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
 
 		std::cout << "el titulo termina en la línea: "<< ordenAuxiliar << std::endl;
 		std::cout << "la cantidad de hijos del título son: " << cuentaHijos(ordenAuxiliar) << std::endl;
 
-		if(revisaCorrectoDentado(++ordenAuxiliar)==1){
+		if(revisaCorrectoDentado(++numLineaAux)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
 		
