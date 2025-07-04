@@ -1,7 +1,10 @@
-titulo del top down;
-	primer nodo;
-		primer hijo del primer nodo;
-			primer hijo del primer hijo del primer nodo;
-		segundo hijo del primer nodo;
-	segundo nodo;
-		primer hijo del segundo nodo;
+titulo del top down
+con más de una línea
+de por medio;
+	ahora este nodo tendrá solo una;
+		y este hijo de hijo tendrá
+		dos para variar;
+		luego este tendrá solo una;
+	y este tendrá una y 
+	otra más y por qué no
+	otra más;

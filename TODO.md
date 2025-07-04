@@ -6,7 +6,8 @@
     - [x] Adaptar método cuentaHijos para que utilice los comienzos de nodos
     - [x] Definir función NombraHijos de Compilador
     - [x] Quitar ordenPadre de nodos, es inútil, no lo necesita cada nodo
-    - [ ] Testear función NombraHijos de Compilador
+    - [x] Testear función NombraHijos de Compilador
+    - [ ] Arreglar método cuentaHijos, no toma en cuenta que un nodo tenga más de una línea
     - [ ] Buscar como sería posible agregar nodos que engloben a otros nodos
     - [ ] Dejar bien ordenadas las definiciones de funciones
     - [ ] Borrar funciones que no se utilicen nunca

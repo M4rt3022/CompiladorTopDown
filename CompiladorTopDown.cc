@@ -9,11 +9,12 @@ void CompiladorTopDown::leeArchivoTD(){
 	archivoTD.leeDesdeArchivo();
 }
 //el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
-int CompiladorTopDown::revisaCorrectoDentado(int& desde){
+int CompiladorTopDown::revisaCorrectoDentado(){
 	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
 	int cantidadLineas = archivoTD.getCantidadLineas();
-	for(;desde<cantidadLineas;desde++){
-		if(archivoTD.getDentadoLinea(desde)<1){
+	int i = archivoTD.getComienzoNodo(1);
+	for(;i<cantidadLineas;i++){
+		if(archivoTD.getDentadoLinea(i)<1){
 			return 1;
 		}
 	}
@@ -23,13 +24,13 @@ int CompiladorTopDown::buscaTituloTP(){
 	std::cout << "[CompiladorTopDown]: Buscando título del top down ..." <<std::endl;
 	std::string titulo;
 	int ordenDesde = 0;
-	juntaContenido(ordenDesde,';',titulo);
+	juntaContenido(archivoTD.getComienzoNodo(0),';',titulo);
 	if(ordenDesde==-1){
 		return -1;
 	}
 	//crea nodo con todo el contenido almacenado
 	topdown.agregaNodo("",titulo);
-	return ordenDesde;
+	return 0;
 }
 void CompiladorTopDown::guardaEnArchivo(){
 	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
@@ -72,6 +73,7 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 }
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
 	int cantidadHijos = cuentaHijos(numLinea);
+	std::cout << "tiene " << cantidadHijos << " hijos" << std::endl;
 	//si no tiene hijos, ni se calienta
 	if (cantidadHijos == 0){
 		return;
@@ -123,17 +125,19 @@ void CompiladorTopDown::compilar(){
 		}
 
 		
+		if(revisaCorrectoDentado()==1){
+			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
+		}
+
 		int numLineaAux = buscaTituloTP();
 		if(numLineaAux==-1){
 			throw (ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
 
 		//una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
-		nombraHijos(numLineaAux,"");
+		std::cout << "el titulo comienza en la línea: " << archivoTD.getComienzoNodo(0) << std::endl;
+		nombraHijos(archivoTD.getComienzoNodo(0),"");
 
-		if(revisaCorrectoDentado(++numLineaAux)==1){
-			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
-		}
 
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();
