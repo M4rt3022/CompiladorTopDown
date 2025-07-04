@@ -19,6 +19,7 @@ class Topdown{
 		bool getError(void){return ocurrio_un_error;}
 		//metodo para guardar topdown en un archivo
 		void guardaTopDown();
+		int getCantidadNodos();
 		//método que guarda un nodo con argumentos en el vector
 		void agregaNodo(const std::string& o, const std::string& cont);
 };

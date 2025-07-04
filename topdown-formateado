@@ -1,1 +1,4 @@
-orden()ordenPadre()contenido(titulo);
+orden()contenido(titulo);
+orden()contenido(titulo);orden(1)contenido(titulohijo1);
+orden()contenido(titulo);orden(1)contenido(titulohijo1);orden(2)contenido(titulohijo1hijo2);
+orden()contenido(titulo);orden(1)contenido(titulohijo1);orden(2)contenido(titulohijo1hijo2);orden(3)contenido(titulohijo1hijo2hijo3);

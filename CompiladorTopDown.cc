@@ -36,22 +36,25 @@ void CompiladorTopDown::guardaEnArchivo(){
 	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
 	topdown.guardaTopDown();
 }
-std::string& CompiladorTopDown::juntaContenido(int & numLinea,const char& caracter){
+std::string& CompiladorTopDown::juntaContenido(const int & numLinea,const char& caracter){
+	std::cout << "juntaContenido (" << numLinea << "," << caracter << ")" << std::endl;
 	static std::string stringAuxiliar = "";
 	int dentado;
 	//primero debo revisar que el orden exista
 	if(numLinea > archivoTD.getCantidadLineas()){
 		return stringAuxiliar;
 	} 
+	int numLineaAux = numLinea;
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
-	dentado = archivoTD.getDentadoLinea(numLinea);
-	for(;dentado==archivoTD.getDentadoLinea(numLinea);numLinea++){
-		archivoTD.getContenidoLinea(numLinea, stringAuxiliar);
-		if(archivoTD.getBoolLinea(numLinea,caracter)){
+	dentado = archivoTD.getDentadoLinea(numLineaAux);
+	std::cout << dentado << std::endl;
+	for(;dentado==archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
+		archivoTD.getContenidoLinea(numLineaAux, stringAuxiliar);
+		if(archivoTD.getBoolLinea(numLineaAux,caracter)){
 			break;
 		}
 	}
-
+	std::cout << "juntaContenido devuelve: " << stringAuxiliar << std::endl;
 	return stringAuxiliar;
 }
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
@@ -70,6 +73,7 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	return cantHijos;
 }
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
+	std::cout << "nombraHijos (" << numLinea << "," << ordenPadre << ")" << std::endl;
 	int cantidadHijos = cuentaHijos(numLinea);
 	//si no tiene hijos, ni se calienta
 	if (cantidadHijos == 0){
@@ -77,8 +81,8 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 	}
 	int cantidadTabs = archivoTD.getDentadoLinea(numLinea);
 	std::vector<int> dondeComienzan;
-	std::string stringAuxiliar;
-	std::string nombreAuxiliar;
+	std::string stringAuxiliar = "";
+	std::string nombreAuxiliar = "";
 	//guardo donde comienza cada hijo del nodo para luego iterarlo
 	for(int i=0;i< cantidadHijos;i++){
 		for(int j = 0;j<archivoTD.getCantidadNodos();j++){
@@ -87,17 +91,25 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 			}
 		}
 	}
+	std::cout << "lugares donde comienzan los contenidos de los hijos" << std::endl;
+	for (int k=0;k<cantidadHijos;k++){
+		std::cout << dondeComienzan[k] << std::endl;
+	}
 	//acá aplica recursividad para que cada padre nombre a su hijo y así sucesivamente
 	for(int i=0;i<cantidadHijos;i++){
-		stringAuxiliar = "";
-		nombreAuxiliar = "";
 		//obtiene todo el contenido de un hijo
 		stringAuxiliar = juntaContenido(dondeComienzan[i],';');
 		//lo nombra como nodoPadre + . + i y le pone el nombre de su padre
-		nombreAuxiliar = ordenPadre + "." + std::to_string(i);
+		std::cout << stringAuxiliar << std::endl;
+		if(ordenPadre.empty()){
+			nombreAuxiliar = std::to_string(i+1);
+		}else if(!ordenPadre.empty()){
+			nombreAuxiliar = ordenPadre + "." + std::to_string(i+1);
+		}
 		topdown.agregaNodo(nombreAuxiliar,stringAuxiliar);
+		std::cout << "agreganodo(" << nombreAuxiliar << "," << stringAuxiliar << ")"<< std::endl;
 		//luego, se le pide que nombre a sus hijos
-		nombraHijos(archivoTD.getComienzoNodo(i),nombreAuxiliar);
+		nombraHijos(dondeComienzan[i],nombreAuxiliar);
 	}
 }
 void CompiladorTopDown::compilar(){
@@ -124,7 +136,11 @@ void CompiladorTopDown::compilar(){
 		if(revisaCorrectoDentado(++numLineaAux)==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
-		
+
+		//ahora se le pide que el padre nombre a sus hijos:
+		nombraHijos(archivoTD.getComienzoNodo(0),"");
+		std::cout << "la cantidad de nodos guardados fue de: " << topdown.getCantidadNodos() << std::endl;
+
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();
 

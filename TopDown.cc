@@ -35,3 +35,6 @@ void Topdown::agregaNodo(const std::string& o, const std::string& cont){
 	nodos.emplace_back(o,cont);
 	return;
 }
+int Topdown::getCantidadNodos(){
+	return (static_cast<int>(nodos.size()));
+}
