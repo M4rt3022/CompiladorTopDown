@@ -12,7 +12,6 @@ void CompiladorTopDown::leeArchivoTD(){
 int CompiladorTopDown::revisaCorrectoDentado(int& desde){
 	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
 	int cantidadLineas = archivoTD.getCantidadLineas();
-	std::cout << "se analizará el dentado del archivo desde el orden de línea: " << desde << std::endl;
 	for(;desde<cantidadLineas;desde++){
 		if(archivoTD.getDentadoLinea(desde)<1){
 			return 1;
@@ -57,14 +56,17 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,const char& caracter
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	int cantHijos = 0;
-	if(numeroLinea> archivoTD.getCantidadLineas()){
+	if(numeroLinea > archivoTD.getCantidadLineas()){
 		return -1;
 	}
 	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
-	int i=0;
-	while(i<archivoTD.getCantidadNodos() && cantidadTabs+1==archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i))){
-		cantHijos++;
-		i++;
+	for(int i = numeroLinea+1; i < archivoTD.getCantidadLineas();i++){
+		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,';')){
+			cantHijos++;
+		}
+		if(cantidadTabs>=archivoTD.getDentadoLinea(i)){
+			break;
+		}
 	}
 	return cantHijos;
 }
@@ -75,13 +77,20 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 		return;
 	}
 	int cantidadTabs = archivoTD.getDentadoLinea(numLinea);
+	//debe buscar su orden en el arreglo de gomienzosNodos
+	int posicionEnComienzosNodos = 0;
+	for (int i=0;i<archivoTD.getCantidadNodos();i++){
+		if(numLinea==archivoTD.getComienzoNodo(i)){
+			posicionEnComienzosNodos = i;
+			break;
+		}
+	}
 	std::vector<int> dondeComienzan;
-	std::string stringAuxiliar = "";
-	std::string nombreAuxiliar = "";
+	std::string stringAuxiliar;
+	std::string nombreAuxiliar;
 	//guardo donde comienza cada hijo del nodo para luego iterarlo
-	std::cout << "cantidad de hijos que tiene:" << cantidadHijos << std::endl;
 	for(int i=0;i< cantidadHijos;i++){
-		for(int j = 0;j<archivoTD.getCantidadNodos();j++){
+		for(int j = posicionEnComienzosNodos;j<archivoTD.getCantidadNodos();j++){
 			if(cantidadTabs+1==archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(j))){
 				dondeComienzan.push_back(archivoTD.getComienzoNodo(j));
 			}

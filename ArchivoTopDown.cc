@@ -76,7 +76,6 @@ void ArchivoTopDown::leeDesdeArchivo(){
 			leerLinea(entrada, auxiliar);
 			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
-		std::cout << "archivo leído, ahora se buscarán los comienzos de cada nodo" << std::endl;
 		//busca donde comienza cada nodo
 		asignarComienzosNodos();
 		entrada.close();
@@ -88,7 +87,6 @@ void ArchivoTopDown::leeDesdeArchivo(){
 }
 void ArchivoTopDown::imprimeComienzosNodos(){
 	int cantidad = static_cast<int>(ComienzoNodos.size());
-	std::cout << "se enunciarán las posiciones de líneas donde comienzan cada nodo en el archivo" << std::endl;
 	for(int i = 0;i < cantidad; i++){
 		std::cout << ComienzoNodos[i] << std::endl;
 	}

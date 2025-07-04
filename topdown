@@ -1,10 +1,7 @@
-titulo;
-	hijo1;
-		hijo1DelHijo1;
-	hijo2;
-		hijo1DelHijo2;
-		hijo2DelHijo2;
-	hijo3;
-		hijo1DelHijo3;
-		hijo2DelHijo3;
-		hijo3DelHijo3;
+titulo del top down;
+	primer nodo;
+		primer hijo del primer nodo;
+			primer hijo del primer hijo del primer nodo;
+		segundo hijo del primer nodo;
+	segundo nodo;
+		primer hijo del segundo nodo;
