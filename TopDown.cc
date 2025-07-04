@@ -17,9 +17,11 @@ void Topdown::guardaTopDown(){
 			//no hay nada que guardar
 			throw(ErrorHandler(TipoError::ERROR_TOPDOWN_ARCHIVO_VACÍO));
 		}
-		for(int i = 0 ; i < static_cast<int>(nodos.size()) ;i++){
+		std::cout << "guardando en archivito ..." << std::endl;
+		for(int i = 0 ; i < getCantidadNodos() ;i++){
+			auxiliar = "";
 			nodos[i].guardarEnString(auxiliar);
-			archivo << auxiliar << std::endl;
+			archivo << auxiliar << '\n';
 		}
 		archivo.close();
 	}catch(const ErrorHandler& error){
