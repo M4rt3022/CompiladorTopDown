@@ -61,7 +61,14 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 		return -1;
 	}
 	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
-	for(int i = numeroLinea+1; i < archivoTD.getCantidadLineas();i++){
+	//debo saltear la cantidad de líneas que tenga el mismo nodo
+	int dondeTermina = numeroLinea;
+	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,';')==0){
+		dondeTermina++;
+	}
+	//ahora cuenta la cantidad de hijos luego de esa línea
+	dondeTermina++;
+	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
 		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,';')){
 			cantHijos++;
 		}
@@ -73,7 +80,6 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 }
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
 	int cantidadHijos = cuentaHijos(numLinea);
-	std::cout << "tiene " << cantidadHijos << " hijos" << std::endl;
 	//si no tiene hijos, ni se calienta
 	if (cantidadHijos == 0){
 		return;
@@ -135,7 +141,6 @@ void CompiladorTopDown::compilar(){
 		}
 
 		//una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
-		std::cout << "el titulo comienza en la línea: " << archivoTD.getComienzoNodo(0) << std::endl;
 		nombraHijos(archivoTD.getComienzoNodo(0),"");
 
 
