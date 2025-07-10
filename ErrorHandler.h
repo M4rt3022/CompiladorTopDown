@@ -5,9 +5,6 @@
 #include <string>
 //lista de todos los errores posibles por el programa 
 enum class TipoError {
-	ERROR_LINEA_FIN_LINEA,
-	ERROR_LINEA_NODO_ABRE,
-	ERROR_LINEA_NODO_CIERRA,
 	ERROR_LINEA_CARAC_DOBLE,
 	ERROR_LINEA_STRING_VACIO,
 	ERROR_LINEA_ABRIR_ARCHIVO,
@@ -29,12 +26,6 @@ class ErrorHandler : public std::exception
 		std::string mensajeError;
 		static std::string obtenerMensajeError(TipoError error){
 			switch(error){
-				case(TipoError::ERROR_LINEA_FIN_LINEA):
-					return "El caracter de final de línea debe ser el último";
-				case(TipoError::ERROR_LINEA_NODO_ABRE):
-					return "El caracter de apertura de nodo debe ser el último";
-				case(TipoError::ERROR_LINEA_NODO_CIERRA):
-					return "El caracter de cerrado de nodo debe ser el último";
 				case(TipoError::ERROR_LINEA_CARAC_DOBLE):
 					return "Se encontró más de un caracter importante en la línea";
 				case(TipoError::ERROR_LINEA_STRING_VACIO):

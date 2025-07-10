@@ -23,6 +23,7 @@ class LineaTopDown{
 		LineaTopDown();
 		LineaTopDown(const std::string &carac);
 		~LineaTopDown();
+
 		//métodos gets
 		int getDentado(void) const {return numeroDentado;}
 		std::string getCaracteres(void) const {return caracteres;}
@@ -30,10 +31,10 @@ class LineaTopDown{
 		bool getNodoAbre(void)const{return caracter_nodo_abre;}
 		bool getNodoCierra(void)const{return caracter_nodo_cierra;}
 		bool getLineaBienEscrita(void)const{return linea_bien_escrita;}
+
 		//devuelve el contenido de la línea antes de un caracter importante, si está bien escrita
 		void obtieneContenido(std::string& salida);
-		//metodo set
-		void setNumero(const int& numero);
+
 		//sobrecarga operadores
 		LineaTopDown& operator= (const LineaTopDown& l);
 		friend std::ostream& operator<< (std::ostream& os, const LineaTopDown& l);

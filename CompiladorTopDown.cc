@@ -2,24 +2,20 @@
 #include "ErrorHandler.h"
 #include <string>
 #include <vector>
+
+//constructor
 CompiladorTopDown::CompiladorTopDown(){}
+
+//destructor
 CompiladorTopDown::~CompiladorTopDown(){}
+
+//método para buscar el ArchivoTD
 void CompiladorTopDown::leeArchivoTD(){
 	std::cout << "[CompiladorTopDown]: Leyendo datos desde archivo ..." << std::endl;
 	archivoTD.leeDesdeArchivo();
 }
-//el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
-int CompiladorTopDown::revisaCorrectoDentado(){
-	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
-	int cantidadLineas = archivoTD.getCantidadLineas();
-	int i = archivoTD.getComienzoNodo(1);
-	for(;i<cantidadLineas;i++){
-		if(archivoTD.getDentadoLinea(i)<1){
-			return 1;
-		}
-	}
-	return 0;
-}
+
+//método para buscar el título del TD, devuelve el numero de línea en donde termina el título, sino, -1
 int CompiladorTopDown::buscaTituloTP(){
 	std::cout << "[CompiladorTopDown]: Buscando título del top down ..." <<std::endl;
 	std::string titulo;
@@ -32,10 +28,21 @@ int CompiladorTopDown::buscaTituloTP(){
 	topdown.agregaNodo("",titulo);
 	return 0;
 }
-void CompiladorTopDown::guardaEnArchivo(){
-	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
-	topdown.guardaTopDown();
+
+//el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
+int CompiladorTopDown::revisaCorrectoDentado(){
+	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
+	int cantidadLineas = archivoTD.getCantidadLineas();
+	int i = archivoTD.getComienzoNodo(1);
+	for(;i<cantidadLineas;i++){
+		if(archivoTD.getDentadoLinea(i)<1){
+			return 1;
+		}
+	}
+	return 0;
 }
+
+//método que toma desde un número de línea en específico y junta su contenido hasta encontrar un caracter, utiliza el orden enviado como referencia y lo modifica
 void CompiladorTopDown::juntaContenido(const int & numLinea,const char& caracter,std::string& salida){
 	salida = "";
 	int dentado;
@@ -54,6 +61,7 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,const char& caracter
 	}
 	return;
 }
+
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	int cantHijos = 0;
@@ -78,6 +86,8 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	}
 	return cantHijos;
 }
+
+//método que cuentaHijos y les otorga sus nombres en base a el nombre del padre
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
 	int cantidadHijos = cuentaHijos(numLinea);
 	//si no tiene hijos, ni se calienta
@@ -119,6 +129,14 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 		nombraHijos(dondeComienzan[i],nombreAuxiliar);
 	}
 }
+
+//método para tomar todo lo guardado en topdown y almacenarlo en un archivo de texto formateado
+void CompiladorTopDown::guardaEnArchivo(){
+	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
+	topdown.guardaTopDown();
+}
+
+//método que engloba todos los métodos anteriores en orden
 void CompiladorTopDown::compilar(){
 	std::cout << "[CompiladorTopDown]: Compilando topdown ..." << std::endl;
 	try{
