@@ -21,35 +21,19 @@ void LineaTopDown::cuentaDentado(){
 
 //método interno para revisar si la línea almacenada tiene caracteres importantes
 void LineaTopDown::buscaCaracteresImportantes(){
-	//si la línea está vacía, no tiene fin_de_linea ni caracter_nodo_abre ni caracter_nodo_cierra
+	//si la línea está vacía, no tiene ningún caracterImportante
 	if(caracteres.empty()){
 		caracter_fin_linea = false;
-		caracter_nodo_abre = false;
-		caracter_nodo_cierra = false;
+		linea_vacía = true;
 		return;
 	}
-	//buscará los siguientes caracteeres
+	//buscará los siguientes caracteeres, si encuentra uno repetido, lanza una excepción, actualiza linea_vacía
 	// caracter_fin_linea = ';'
-	// caracter_nodo_abre = '{'
-	// caracter_nodo_cierra = '}'
 	try{
 		for (char c : caracteres) {
 			if((c == ';')&&(caracter_fin_linea == false)){
 				caracter_fin_linea = true;
 			}else if((c==';')&&(caracter_fin_linea == true)){
-				linea_bien_escrita = false;
-				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-			}
-			if((c == '{')&&(caracter_nodo_abre == false)){
-				caracter_fin_linea = true;
-			}else if((c == '{')&&(caracter_nodo_abre == true)){
-				linea_bien_escrita = false;
-				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-			}
-			if((c == '}')&&(caracter_nodo_cierra== false)){
-				caracter_fin_linea = true;
-			}else if((c == '}')&&(caracter_nodo_cierra == true)){
-				linea_bien_escrita = false;
 				throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
 			}
 		}
@@ -63,41 +47,19 @@ void LineaTopDown::buscaCaracteresImportantes(){
 
 //método interno que cuentaDentado, buscaCaracteresImportantes y se fija si tiene caracteres dobles o están mal escritos en la línea
 void LineaTopDown::analizaSintaxis(){
-	int booleanosActivos = caracter_fin_linea + caracter_nodo_abre + caracter_nodo_cierra;
 	//primero se fija si tiene algo que leer
 	if(caracteres.empty()){
 		return;
 	}
 	cuentaDentado();
 	buscaCaracteresImportantes();
-	//si no tiene ningún caracter importante, no hay nada más que analizar
-	if(booleanosActivos == 0){
-		return;
-	}
-	try{
-		//si tiene más de un caracter importante, está mal escrita
-		if(booleanosActivos>1){
-			linea_bien_escrita = false;
-			throw(ErrorHandler(TipoError::ERROR_LINEA_CARAC_DOBLE));
-			return;
-		}
-	}
-	catch(const ErrorHandler& error){
-		std::cerr << "[ERROR]: " << error.what() << std::endl;
-		return;
-	}
 }
 
 //constructores
-LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), caracter_nodo_abre(false),
-	caracter_nodo_cierra(false),linea_bien_escrita(true){
-}
+LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), linea_vacía(true){};
 LineaTopDown::LineaTopDown(const std::string& carac){
 	caracteres = carac;
 	caracter_fin_linea = false;
-	caracter_nodo_abre = false;
-	caracter_nodo_cierra = false;
-	linea_bien_escrita = true;
 	analizaSintaxis();
 	return;
 }
@@ -109,9 +71,6 @@ LineaTopDown::~LineaTopDown(){
 //método que devuelve un string de lo que tiene la línea antes de un caracter importante, si está bien escrita
 void LineaTopDown::obtieneContenido(std::string& salida){
 	try{
-		if(!linea_bien_escrita){
-			throw(ErrorHandler(TipoError::ERROR_LINEA_MAL_ESCRITA));
-		}
 		std::string::const_iterator it = caracteres.begin();
 		while(it != caracteres.end() && ((*it) == ' ' || (*it) == '\t' )) ++it;
 		for(;it != caracteres.end() && (*it) != ';' && (*it) != '{' && (*it) != '}'; it++){
@@ -133,8 +92,6 @@ LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
 	numeroDentado = l.numeroDentado;
 	caracteres = l.caracteres;
 	caracter_fin_linea = l.caracter_fin_linea;
-	caracter_nodo_abre = l.caracter_nodo_abre;
-	caracter_nodo_cierra = l.caracter_nodo_cierra;
 	return *this;
 }
 std::istream& operator>>(std::istream&is, LineaTopDown&l){

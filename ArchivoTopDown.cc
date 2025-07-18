@@ -34,7 +34,6 @@ ArchivoTopDown::~ArchivoTopDown(){
 }
 
 //métodos get
-
 std::string ArchivoTopDown::getLinea(const int& numero){
 	//acá debería revisar que sea un número válido
 	return LineasArchivo[numero].getCaracteres();
@@ -85,12 +84,6 @@ int ArchivoTopDown::getBoolLinea(const int& orden, const char& caracter){
 		if(caracter == ';'){
 			return (static_cast<int>(LineasArchivo[orden].getFinLinea()));
 		}
-		if(caracter == '{'){
-			return (static_cast<int>(LineasArchivo[orden].getNodoAbre()));
-		}
-		if(caracter == '}'){
-			return (static_cast<int>(LineasArchivo[orden].getNodoCierra()));
-		}
 		throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
 	}
 	catch(const ErrorHandler& error){
@@ -106,6 +99,7 @@ int ArchivoTopDown::getComienzoNodo(const int& numero){
 	return(ComienzoNodos[numero]);
 }
 //método que cuenta la cantidad de comienzos de nodos que tiene y lo devuelve
+//	ESTO ES AMBIGUO, DEBE SER CAMBIADO
 int ArchivoTopDown::getCantidadNodos(){
 	return (static_cast<int>(ComienzoNodos.size()));
 }

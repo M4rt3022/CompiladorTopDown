@@ -33,7 +33,7 @@ class ArchivoTopDown{
 
 		bool getError(void)const{return ocurrio_un_error;}
 
-		//método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea
+		//método que devuelve el valor de uno de los booleanos de caracteres de una línea
 		// 1 si es verdadero, 0 si es falso y -1 si hubo un error
 		int getBoolLinea(const int & orden,const char& caracter);
 
@@ -41,6 +41,7 @@ class ArchivoTopDown{
 		int getComienzoNodo(const int& numero);
 
 		//método que cuenta la cantidad de comienzos de nodos que tiene y lo devuelve
+		//	ESTO ES AMBIGUO, DEBE SER CAMBIADO
 		int getCantidadNodos();
 
 		//ELIMINAR ESTO LUEGO
