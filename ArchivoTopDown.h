@@ -13,6 +13,8 @@ class ArchivoTopDown{
 		bool ocurrio_un_error;
 		//método interno, guarda donde comienza cada nodo en el vector
 		void asignarComienzosNodos();
+		//método interno, revisa que por lo menos una línea no esté vacía
+		void revisaArchivoNoVacio();
 	public:
 		//constructor
 		ArchivoTopDown();
@@ -35,7 +37,8 @@ class ArchivoTopDown{
 
 		//método que devuelve el valor de uno de los booleanos de caracteres de una línea
 		// 1 si es verdadero, 0 si es falso y -1 si hubo un error
-		int getBoolLinea(const int & orden,const char& caracter);
+		//	ESTO SE DEBE ADAPTAR PARA QUE TAMBIÉN PUEDA DEVOLVER OTROS BOOLEANOS
+		int getBoolLinea(const int & orden,const int& ordenBool);
 
 		//devuelve el valor de un ComienzoNodos
 		int getComienzoNodo(const int& numero);

@@ -23,6 +23,30 @@ void ArchivoTopDown::asignarComienzosNodos(){
 	}
 }
 
+//método interno, revisa que por lo menos una línea no esté vacía
+//	esto tal vez pueda hacerlo más efectivo
+void ArchivoTopDown::revisaArchivoNoVacio(){
+	bool archivo_tiene_algo = false;
+	try{
+		if(getCantidadLineas()==0){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
+		}
+		for(int i = 0; i< getCantidadLineas();i++){
+			if(!LineasArchivo[i].getLineaVacia()){
+				archivo_tiene_algo = true;
+			}
+		}
+		if(!archivo_tiene_algo){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
+		}
+		return;
+	}
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		ocurrio_un_error = true;
+		return;
+	}
+}
 //constructor
 ArchivoTopDown::ArchivoTopDown(){
 	ocurrio_un_error = false;
@@ -75,16 +99,22 @@ int ArchivoTopDown::getDentadoLinea(const int& orden){
 
 //método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea
 // 1 si es verdadero, 0 si es falso y -1 si hubo un error
-int ArchivoTopDown::getBoolLinea(const int& orden, const char& caracter){
+int ArchivoTopDown::getBoolLinea(const int& orden, const int& ordenBool){
 	try{
 		if( orden > static_cast<int>(LineasArchivo.size()) ){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
 		//busca que bool debe retornar y lo devuelve 
-		if(caracter == ';'){
-			return (static_cast<int>(LineasArchivo[orden].getFinLinea()));
+		// el orden es 	0	caracter_fin_linea
+		//		1	linea_vacia
+		switch (ordenBool) {
+			case 0:
+				return(static_cast<int>(LineasArchivo[orden].getFinLinea()));
+			case 1:
+				return(static_cast<int>(LineasArchivo[orden].getLineaVacia()));
+			default:
+				throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
 		}
-		throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
 	}
 	catch(const ErrorHandler& error){
 		std::cerr << "[ERROR]: " << error.what() << std::endl;

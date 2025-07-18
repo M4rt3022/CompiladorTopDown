@@ -26,8 +26,9 @@ class CompiladorTopDown{
 		//toma el archivo y busca que todas las lineas luego del título tengan por lo menos 1 tabulador
 		int revisaCorrectoDentado();
 
-		//método que toma desde un número de línea en específico y junta su contenido hasta encontrar un caracter, utiliza el orden enviado como referencia y lo modifica
-		void juntaContenido(const int & numLinea,const char& caracter,std::string& salida);
+		//método que toma desde un número de línea en específico y junta su contenido hasta encontrar un caracter_fin_linea
+		//utiliza el orden enviado como referencia y lo modifica
+		void juntaContenido(const int & numLinea,std::string& salida);
 
 		//método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 		int cuentaHijos(const int&numLinea);
