@@ -4,32 +4,42 @@
 #include <string>
 #include "ErrorHandler.h" // clase personalizada para facilitar el manejo de excepciones en el programa
 
-//método interno para contar la cantidad de caracteres de dentado que hay
-void LineaTopDown::cuentaDentado(){
-	int cantidadDentado = 0;
-	if (caracteres.empty()){ // si no tiene caracteres, no tiene dentado
-		numeroDentado = 0;
+// Método interno que cuenta el dentado de la línea, se fija si está vacía o no, y modifica caracteres importantes
+void LineaTopDown::analizaSintaxis(){
+
+	//primero se fija si tiene algo que leer
+	if(caracteres.empty()){
+		linea_vacía = true;
+		caracter_fin_linea = false;
 		return;
 	}
+
+	int cantidadDentado = 0;
+
 	//se recorre el string en búsqueda de un caracter de dentado, en este caso '\t'
+	
 	for (std::string::iterator it = caracteres.begin(); it != caracteres.end() && ((*it)==' '||(*it)=='\t');it++){
 		cantidadDentado++;
 	}
 	numeroDentado = cantidadDentado;
-	return;
-}
+	
+	//	debe revisar que por lo menos un caracter es diferente a los caracteres '\t' y '\n'
+	bool encontro_caracter_diferente = false;
+	for (char c : caracteres){
+		if( c != '\t' || c != '\n'){
+			encontro_caracter_diferente = true;
+		}
+	}
+	encontro_caracter_diferente ? linea_vacía = false : linea_vacía = true;
 
-//método interno para revisar si la línea almacenada tiene caracteres importantes
-void LineaTopDown::buscaCaracteresImportantes(){
-	//si la línea está vacía, no tiene ningún caracterImportante
-	if(caracteres.empty()){
+	if(linea_vacía){
 		caracter_fin_linea = false;
-		linea_vacía = true;
 		return;
 	}
-	//buscará los siguientes caracteeres, si encuentra uno repetido, lanza una excepción, actualiza linea_vacía
-	// caracter_fin_linea = ';'
+
+	//luego se fija que no tenga ningún caracter importante repetido
 	try{
+
 		for (char c : caracteres) {
 			if((c == ';')&&(caracter_fin_linea == false)){
 				caracter_fin_linea = true;
@@ -42,17 +52,6 @@ void LineaTopDown::buscaCaracteresImportantes(){
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return;
 	}
-	return;
-}
-
-//método interno que cuentaDentado, buscaCaracteresImportantes y se fija si tiene caracteres dobles o están mal escritos en la línea
-void LineaTopDown::analizaSintaxis(){
-	//primero se fija si tiene algo que leer
-	if(caracteres.empty()){
-		return;
-	}
-	cuentaDentado();
-	buscaCaracteresImportantes();
 }
 
 //constructores

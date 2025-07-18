@@ -10,11 +10,7 @@ class LineaTopDown{
 		std::string caracteres;
 		bool caracter_fin_linea;
 		bool linea_vacía;	//si la línea no tiene otro caracter que no sea '\n o \t', está vacía
-		//método interno para contar la cantidad de caracteres de dentado que hay
-		void cuentaDentado();
-		//método interno para revisar si la línea almacenada tiene caracteres importantes o si está vacía
-		void buscaCaracteresImportantes();
-		//método interno que cuentaDentado, buscaCaracteresImportantes y se fija si tiene caracteres dobles o están mal escritos en la línea
+		// Método interno que cuenta el dentado de la línea, se fija si está vacía o no, y modifica caracteres importantes
 		void analizaSintaxis();
 	public:
 		//constructores
@@ -26,6 +22,7 @@ class LineaTopDown{
 		int getDentado(void) const {return numeroDentado;}
 		std::string getCaracteres(void) const {return caracteres;}
 		bool getFinLinea(void)const{return caracter_fin_linea;}
+		bool getLineaVacia(void)const{return linea_vacía;}
 
 		//devuelve el contenido de la línea antes de un caracter importante, si está bien escrita
 		void obtieneContenido(std::string& salida);
