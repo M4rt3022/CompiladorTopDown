@@ -73,6 +73,9 @@ void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 		if( orden > static_cast<int>(LineasArchivo.size()) ){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
+		if(LineasArchivo[orden].getLineaVacia()==1){
+			throw(ErrorHandler(TipoError::ERROR_LINEA_STRING_VACIO));
+		}
 		LineasArchivo[orden].obtieneContenido(salida);
 		return;
 	}

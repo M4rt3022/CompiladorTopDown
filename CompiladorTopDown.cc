@@ -11,13 +11,13 @@ CompiladorTopDown::~CompiladorTopDown(){}
 
 //método para buscar el ArchivoTD
 void CompiladorTopDown::leeArchivoTD(){
-	std::cout << "[CompiladorTopDown]: Leyendo datos desde archivo ..." << std::endl;
+	std::cout << "[CompiladorTopDown]: Leyendo datos desde archivo" << std::endl;
 	archivoTD.leeDesdeArchivo();
 }
 
 //método para buscar el título del TD, devuelve el numero de línea en donde termina el título, sino, -1
 int CompiladorTopDown::buscaTituloTP(){
-	std::cout << "[CompiladorTopDown]: Buscando título del top down ..." <<std::endl;
+	std::cout << "[CompiladorTopDown]: Buscando título del top down" <<std::endl;
 	std::string titulo;
 	int ordenDesde = 0;
 	juntaContenido(archivoTD.getComienzoNodo(0),titulo);
@@ -31,7 +31,7 @@ int CompiladorTopDown::buscaTituloTP(){
 
 //el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
 int CompiladorTopDown::revisaCorrectoDentado(){
-	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo ..." << std::endl;
+	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo" << std::endl;
 	int cantidadLineas = archivoTD.getCantidadLineas();
 	int i = archivoTD.getComienzoNodo(1);
 	for(;i<cantidadLineas;i++){
@@ -66,18 +66,26 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
+
 	int cantHijos = 0;
+
 	if(numeroLinea > archivoTD.getCantidadLineas()){
-		return -1;
+		return 1;
 	}
+
 	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
+
 	//debo saltear la cantidad de líneas que tenga el mismo nodo
 	int dondeTermina = numeroLinea;
+
 	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,0)==0){
 		dondeTermina++;
 	}
+
 	//ahora cuenta la cantidad de hijos luego de esa línea
+
 	dondeTermina++;
+
 	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
 		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,0)){
 			cantHijos++;
@@ -86,7 +94,9 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 			break;
 		}
 	}
+
 	return cantHijos;
+
 }
 
 //método que cuentaHijos y les otorga sus nombres en base a el nombre del padre
@@ -134,13 +144,13 @@ void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& orde
 
 //método para tomar todo lo guardado en topdown y almacenarlo en un archivo de texto formateado
 void CompiladorTopDown::guardaEnArchivo(){
-	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown ..." <<std::endl;
+	std::cout << "[CompiladorTopDown]: Guardando archivo formateado de topdown" <<std::endl;
 	topdown.guardaTopDown();
 }
 
 //método que engloba todos los métodos anteriores en orden
 void CompiladorTopDown::compilar(){
-	std::cout << "[CompiladorTopDown]: Compilando topdown ..." << std::endl;
+	std::cout << "[CompiladorTopDown]: Compilando topdown" << std::endl;
 	try{
 		//carga los datos del topdown
 		leeArchivoTD();
@@ -161,8 +171,8 @@ void CompiladorTopDown::compilar(){
 		}
 
 		//una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
+		std::cout << "[CompiladorTopDown]: Generando nodos" << std::endl;
 		nombraHijos(archivoTD.getComienzoNodo(0),"");
-
 
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();

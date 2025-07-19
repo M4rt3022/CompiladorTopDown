@@ -4,14 +4,22 @@
 #include <fstream>
 #include <string>
 #include "ErrorHandler.h"	//clase personalizada para manejar los errores en el programa
+enum booleanosLinea{
+	caracter_fin_linea,
+	iteracion_en_linea,
+	condicion_en_linea,
+	linea_vacía
+};
 class LineaTopDown{
 	private:
 		int numeroDentado;
 		std::string caracteres;
-		bool caracter_fin_linea;
-		bool linea_vacía;	//si la línea no tiene otro caracter que no sea '\n o \t', está vacía
-		// Método interno que cuenta el dentado de la línea, se fija si está vacía o no, y modifica caracteres importantes
-		void analizaSintaxis();
+		bool caracter_fin_linea;	// representa el caracter hasta donde se considerarán los caracteres útiles de un nodo
+		bool iteracion_en_linea;	// marca que el contenido de la línea tendrá propiedades de una iteración en el topdown
+		bool condicion_en_linea;	// marca que el contenido de la línea tendrá propiedades de una condición en el topdown
+		bool linea_vacía;		// si la línea no tiene otro caracter que no sea '\n o \t', está vacía
+		void analizaSintaxis();		// Método interno que cuenta el dentado de la línea, se fija si está vacía o no, y modifica caracteres importantes
+
 	public:
 		//constructores
 		LineaTopDown();

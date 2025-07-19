@@ -29,7 +29,7 @@ class ErrorHandler : public std::exception
 				case(TipoError::ERROR_LINEA_CARAC_DOBLE):
 					return "Se encontró más de un caracter importante en la línea";
 				case(TipoError::ERROR_LINEA_STRING_VACIO):
-					return "El string leído está vacío";
+					return "La linea está vacía";
 				case(TipoError::ERROR_LINEA_ABRIR_ARCHIVO):
 					return "Error al abrir el archivo";
 				case(TipoError::ERROR_LINEA_INEXISTENTE):
