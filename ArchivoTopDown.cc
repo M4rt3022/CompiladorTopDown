@@ -143,25 +143,6 @@ void ArchivoTopDown::imprimeComienzosNodos(){
 	return;
 }
 
-//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'
-void ArchivoTopDown::leerLinea(std::ifstream& archivo, std::string& salida){
-	if(!archivo){
-		return;
-	}
-	salida = "";
-	char c;
-	archivo.get(c);
-	while(!archivo.eof() && c != '\n'){
-		salida += c;
-		archivo.get(c);
-	}
-	if(c == '\n'){
-		salida += c;
-		return;
-	}
-	return;
-}
-
 //método para leer todo el archivo para almacenar la información en las LineasArchivo
 void ArchivoTopDown::leeDesdeArchivo(){
 	int cantidadLineas = 0;
@@ -183,7 +164,7 @@ void ArchivoTopDown::leeDesdeArchivo(){
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
 		for (int i = 0; i < cantidadLineas; ++i) {
-			leerLinea(entrada, auxiliar);
+			std::getline(entrada,auxiliar);
 			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
 		//busca donde comienza cada nodo

@@ -50,9 +50,6 @@ class ArchivoTopDown{
 		//ELIMINAR ESTO LUEGO
 		void imprimeComienzosNodos();
 
-		//método aparte para obtener una línea de un archivo y evitar el uso de GetString ya que el mismo elimina '\n'
-		void leerLinea(std::ifstream& archivo, std::string& salida);
-
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo
 		void leeDesdeArchivo();
 
