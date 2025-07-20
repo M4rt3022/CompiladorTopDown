@@ -33,12 +33,10 @@ class ArchivoTopDown{
 		//Devuelve la cantidad de tabuladores de la linea que se encuentra en orden
 		int getDentadoLinea(const int& orden);
 
-		bool getError(void)const{return ocurrio_un_error;}
+		//devuelve el valor de un booleano de una línea en el orden indicado
+		int getBoolLinea(const int& orden, const LineaTopDown::flag & f);
 
-		//método que devuelve el valor de uno de los booleanos de caracteres de una línea
-		// 1 si es verdadero, 0 si es falso y -1 si hubo un error
-		//	ESTO SE DEBE ADAPTAR PARA QUE TAMBIÉN PUEDA DEVOLVER OTROS BOOLEANOS
-		int getBoolLinea(const int & orden,const int& ordenBool);
+		bool getError(void)const{return ocurrio_un_error;}
 
 		//devuelve el valor de un ComienzoNodos
 		int getComienzoNodo(const int& numero);

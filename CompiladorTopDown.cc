@@ -1,5 +1,6 @@
 #include "CompiladorTopDown.h"
 #include "ErrorHandler.h"
+#include "LineaTopDown.h"
 #include <string>
 #include <vector>
 
@@ -36,7 +37,7 @@ int CompiladorTopDown::revisaCorrectoDentado(){
 	int i = archivoTD.getComienzoNodo(1);
 	for(;i<cantidadLineas;i++){
 		//debe fijarse que el dentado sea el correcto y que la línea no esté vacía
-		if((archivoTD.getDentadoLinea(i)<1)&&(0 == archivoTD.getBoolLinea(i, 1))){
+		if((archivoTD.getDentadoLinea(i)<1)&&(0 == archivoTD.getBoolLinea(i, LineaTopDown::flag::flag_linea_vacía))){
 			return 1;
 		}
 	}
@@ -57,7 +58,7 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 	dentado = archivoTD.getDentadoLinea(numLineaAux);
 	for(;dentado==archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
 		archivoTD.getContenidoLinea(numLineaAux, salida);
-		if(archivoTD.getBoolLinea(numLineaAux,0)){
+		if(archivoTD.getBoolLinea(numLineaAux,LineaTopDown::flag::flag_caracter_fin_linea)){
 			break;
 		}
 	}
@@ -78,7 +79,7 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	//debo saltear la cantidad de líneas que tenga el mismo nodo
 	int dondeTermina = numeroLinea;
 
-	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,0)==0){
+	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,LineaTopDown::flag::flag_caracter_fin_linea)==0){
 		dondeTermina++;
 	}
 
@@ -87,7 +88,7 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	dondeTermina++;
 
 	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
-		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,0)){
+		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,LineaTopDown::flag::flag_caracter_fin_linea)){
 			cantHijos++;
 		}
 		if(cantidadTabs>=archivoTD.getDentadoLinea(i)){

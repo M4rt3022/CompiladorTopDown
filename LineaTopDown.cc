@@ -68,6 +68,28 @@ LineaTopDown::LineaTopDown(const std::string& carac){
 LineaTopDown::~LineaTopDown(){
 }
 
+//devuelve el valor de algun flag de la línea
+bool LineaTopDown::getValorFlag(const flag& f){
+	try{
+		switch(f){
+			case flag::flag_caracter_fin_linea:	return (static_cast<int>(caracter_fin_linea));
+
+			case flag::flag_iteracion_en_linea:	return (static_cast<int>(iteracion_en_linea));
+
+			case flag::flag_condicion_en_linea:	return (static_cast<int>(condicion_en_linea));
+
+			case flag::flag_linea_vacía:		return (static_cast<int>(linea_vacía));
+
+			default:	throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
+
+		}
+	}
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		return false;
+	}
+}
+
 //método que devuelve un string de lo que tiene la línea antes de un caracter importante, si está bien escrita
 void LineaTopDown::obtieneContenido(std::string& salida){
 	try{

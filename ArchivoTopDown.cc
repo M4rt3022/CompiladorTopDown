@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include "ErrorHandler.h"
+#include "LineaTopDown.h"
 #include "ArchivoTopDown.h"
 
 //método interno, guarda donde comienza cada nodo en el vector
@@ -17,7 +18,7 @@ void ArchivoTopDown::asignarComienzosNodos(){
 		ComienzoNodos.push_back(i);
 		dentadoAuxiliar = LineasArchivo[i].getDentado();
 		//salteo lo que es el mismo nodo
-		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getFinLinea()){
+		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
 			i++;
 		}
 	}
@@ -32,7 +33,7 @@ void ArchivoTopDown::revisaArchivoNoVacio(){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
 		for(int i = 0; i< getCantidadLineas();i++){
-			if(!LineasArchivo[i].getLineaVacia()){
+			if(!LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)){
 				archivo_tiene_algo = true;
 			}
 		}
@@ -73,7 +74,7 @@ void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 		if( orden > static_cast<int>(LineasArchivo.size()) ){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
-		if(LineasArchivo[orden].getLineaVacia()==1){
+		if(LineasArchivo[orden].getValorFlag(LineaTopDown::flag::flag_linea_vacía)==1){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_STRING_VACIO));
 		}
 		LineasArchivo[orden].obtieneContenido(salida);
@@ -100,30 +101,20 @@ int ArchivoTopDown::getDentadoLinea(const int& orden){
 	}
 }
 
-//método que devuelve el valor de uno de los 3 booleanos de caracteres de una línea
-// 1 si es verdadero, 0 si es falso y -1 si hubo un error
-int ArchivoTopDown::getBoolLinea(const int& orden, const int& ordenBool){
+//devuelve el valor de un booleano de una línea en el orden indicado
+int ArchivoTopDown::getBoolLinea(const int& orden, const LineaTopDown::flag & f){
 	try{
-		if( orden > static_cast<int>(LineasArchivo.size()) ){
+		if(orden > getCantidadLineas()){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
 		}
-		//busca que bool debe retornar y lo devuelve 
-		// el orden es 	0	caracter_fin_linea
-		//		1	linea_vacia
-		switch (ordenBool) {
-			case 0:
-				return(static_cast<int>(LineasArchivo[orden].getFinLinea()));
-			case 1:
-				return(static_cast<int>(LineasArchivo[orden].getLineaVacia()));
-			default:
-				throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
-		}
+		return (LineasArchivo[orden].getValorFlag(f));
 	}
 	catch(const ErrorHandler& error){
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return -1;
 	}
 }
+
 //devuelve el valor de un ComienzoNodo
 int ArchivoTopDown::getComienzoNodo(const int& numero){
 	if(numero>getCantidadNodos()){
