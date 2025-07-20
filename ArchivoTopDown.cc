@@ -15,10 +15,14 @@ void ArchivoTopDown::asignarComienzosNodos(){
 	int i = 0;
 	int dentadoAuxiliar;
 	for(;i<getCantidadLineas();i++){
+		//salteo líneas vacías
+		while(LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)){
+			i++;
+		}
 		ComienzoNodos.push_back(i);
 		dentadoAuxiliar = LineasArchivo[i].getDentado();
 		//salteo lo que es el mismo nodo
-		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
+		while((LineasArchivo[i].getDentado() == dentadoAuxiliar || LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)) && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
 			i++;
 		}
 	}

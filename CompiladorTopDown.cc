@@ -56,12 +56,20 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 	int numLineaAux = numLinea;
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
 	dentado = archivoTD.getDentadoLinea(numLineaAux);
-	for(;dentado==archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
+	for(; numLineaAux < archivoTD.getCantidadLineas() ;numLineaAux++){
+		//si pasa por una línea con un dentado diferente a donde comenzó, deja de juntar contenido
+		//	ESTO TIENE UN ERROR: terminará de juntar contenido si encuentra una línea con otro dentado y que tenga
+		//	el flag, esto puede generar que junte contenido de una línea sin que termine en ';'
+		if(archivoTD.getDentadoLinea(numLineaAux)!=dentado &&
+			!archivoTD.getBoolLinea(numLineaAux, LineaTopDown::flag::flag_linea_vacía)){
+			break;
+		}
 		//si la línea está vacía, me salteo la línea
 		if(archivoTD.getBoolLinea(numLineaAux, LineaTopDown::flag::flag_linea_vacía)){
 			continue;
 		}
 		archivoTD.getContenidoLinea(numLineaAux, salida);
+		// si encontró un final de línea, termina de juntar contenido
 		if(archivoTD.getBoolLinea(numLineaAux,LineaTopDown::flag::flag_caracter_fin_linea)){
 			break;
 		}
@@ -99,9 +107,9 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 
 //método que cuentaHijos y les otorga sus nombres en base a el nombre del padre
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
+	//primero cuento cuantos hijos tiene el nodo recibido
 	int cantidadHijos = cuentaHijos(numLinea);
-	std::cout << "este nodo tiene: " << cantidadHijos << std::endl;
-	//si no tiene hijos, ni se calienta
+	//si no tiene hijos no hay nada que nombrar
 	if (cantidadHijos == 0){
 		return;
 	}
@@ -169,12 +177,7 @@ void CompiladorTopDown::compilar(){
 			throw (ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
 
-		//	ELIMINAR
-		std::cout << "La cantidad de hijos que tiene el título es: " << cuentaHijos(0) << std::endl;
-		//	ELIMINAR
-		
-		
-		//una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
+		// una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
 		std::cout << "[CompiladorTopDown]: Generando nodos" << std::endl;
 		nombraHijos(archivoTD.getComienzoNodo(0),"");
 
