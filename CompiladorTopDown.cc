@@ -57,6 +57,10 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
 	dentado = archivoTD.getDentadoLinea(numLineaAux);
 	for(;dentado==archivoTD.getDentadoLinea(numLineaAux);numLineaAux++){
+		//si la línea está vacía, me salteo la línea
+		if(archivoTD.getBoolLinea(numLineaAux, LineaTopDown::flag::flag_linea_vacía)){
+			continue;
+		}
 		archivoTD.getContenidoLinea(numLineaAux, salida);
 		if(archivoTD.getBoolLinea(numLineaAux,LineaTopDown::flag::flag_caracter_fin_linea)){
 			break;
@@ -67,27 +71,22 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
 int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
-
 	int cantHijos = 0;
-
 	if(numeroLinea > archivoTD.getCantidadLineas()){
 		return 1;
 	}
-
 	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
-
 	//debo saltear la cantidad de líneas que tenga el mismo nodo
 	int dondeTermina = numeroLinea;
-
 	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,LineaTopDown::flag::flag_caracter_fin_linea)==0){
 		dondeTermina++;
 	}
-
 	//ahora cuenta la cantidad de hijos luego de esa línea
-
 	dondeTermina++;
-
 	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
+		if(archivoTD.getBoolLinea(i, LineaTopDown::flag::flag_linea_vacía)){
+			continue;
+		}
 		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,LineaTopDown::flag::flag_caracter_fin_linea)){
 			cantHijos++;
 		}
@@ -95,14 +94,13 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 			break;
 		}
 	}
-
 	return cantHijos;
-
 }
 
 //método que cuentaHijos y les otorga sus nombres en base a el nombre del padre
 void CompiladorTopDown::nombraHijos(const int &numLinea ,const std::string& ordenPadre){
 	int cantidadHijos = cuentaHijos(numLinea);
+	std::cout << "este nodo tiene: " << cantidadHijos << std::endl;
 	//si no tiene hijos, ni se calienta
 	if (cantidadHijos == 0){
 		return;
@@ -171,6 +169,11 @@ void CompiladorTopDown::compilar(){
 			throw (ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
 		}
 
+		//	ELIMINAR
+		std::cout << "La cantidad de hijos que tiene el título es: " << cuentaHijos(0) << std::endl;
+		//	ELIMINAR
+		
+		
 		//una vez que ya obtuvo el título, recursivamente nombra a los hijos del mismo
 		std::cout << "[CompiladorTopDown]: Generando nodos" << std::endl;
 		nombraHijos(archivoTD.getComienzoNodo(0),"");
