@@ -124,9 +124,9 @@ int ArchivoTopDown::estaVacia(std::string & caracteres){
 		}
 	}
 	if(encontro_caracter_diferente){
-		return 1;
-	}else{
 		return 0;
+	}else{
+		return 1;
 	}
 }
 
@@ -147,17 +147,19 @@ void ArchivoTopDown::leeDesdeArchivo(){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
 		LineasArchivo.resize(cantidadLineas);
+		std::cout << "cantidad de líneas reservadas " << cantidadLineas << std::endl;
 		// Volver a leer desde el principio
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
 		for (int i = 0; i < cantidadLineas; ++i) {
 			std::getline(entrada,auxiliar);
 			//si está vacía, no la guarda
-			if(estaVacia(auxiliar)){
+			if(1==estaVacia(auxiliar)){
 				std::cout << "esta línea está vacía" <<std::endl;
 				continue;
 			}
 			LineasArchivo[i] = LineaTopDown(auxiliar);
+			std::cout << "se guardo una línea" << std::endl;
 		}
 		//busca donde comienza cada nodo
 		asignarComienzosNodos();
