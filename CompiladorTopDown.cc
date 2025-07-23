@@ -30,17 +30,31 @@ int CompiladorTopDown::buscaTituloTP(){
 	return 0;
 }
 
-//el dentado del archivo solo debe tener una línea sin dentado y las demás por lo menos con uno
+// busca que ninguna línea tenga 2 tabuladores más que la anterior y que el título se encuentre bien escrito
+// función sin terminar
 int CompiladorTopDown::revisaCorrectoDentado(){
 	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo" << std::endl;
-	int cantidadLineas = archivoTD.getCantidadLineas();
-	int i = archivoTD.getComienzoNodo(1);
-	for(;i<cantidadLineas;i++){
-		//debe fijarse que el dentado sea el correcto y que la línea no esté vacía
-		if((archivoTD.getDentadoLinea(i)<1)&&(0 == archivoTD.getBoolLinea(i, LineaTopDown::flag::flag_linea_vacía))){
+	int dentadoActual;
+	int orden;
+	bool es_valida = true;	//con esto reviso cada línea
+	//primero reviso que todas las líneas excepto el título tengan 1 dentado más que el título
+	// guardo el dentado que tiene el título que comienza en comienzosNodos(0);
+	orden = archivoTD.getComienzoNodo(0);
+	dentadoActual = archivoTD.getDentadoLinea(orden);
+	// reviso que todas las líneas del título tengan el mismo dentado
+	for(;0==archivoTD.getBoolLinea(orden, LineaTopDown::flag::flag_caracter_fin_linea)&&orden<archivoTD.getCantidadLineas();orden++){
+		if(archivoTD.getDentadoLinea(orden)==dentadoActual){
+			es_valida = true;
+		}else{
+			es_valida = false;
+		}
+		if(!es_valida){
 			return 1;
 		}
 	}
+	//ahora reviso que todas las líneas del archivo luego del título tengan por lo menos 1 dentado más que el título
+	orden = archivoTD.getComienzoNodo(1);
+	for(;;)
 	return 0;
 }
 
@@ -60,13 +74,8 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 		//si pasa por una línea con un dentado diferente a donde comenzó, deja de juntar contenido
 		//	ESTO TIENE UN ERROR: terminará de juntar contenido si encuentra una línea con otro dentado y que tenga
 		//	el flag, esto puede generar que junte contenido de una línea sin que termine en ';'
-		if(archivoTD.getDentadoLinea(numLineaAux)!=dentado &&
-			!archivoTD.getBoolLinea(numLineaAux, LineaTopDown::flag::flag_linea_vacía)){
+		if(archivoTD.getDentadoLinea(numLineaAux)!=dentado){
 			break;
-		}
-		//si la línea está vacía, me salteo la línea
-		if(archivoTD.getBoolLinea(numLineaAux, LineaTopDown::flag::flag_linea_vacía)){
-			continue;
 		}
 		archivoTD.getContenidoLinea(numLineaAux, salida);
 		// si encontró un final de línea, termina de juntar contenido
@@ -92,9 +101,6 @@ int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	//ahora cuenta la cantidad de hijos luego de esa línea
 	dondeTermina++;
 	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
-		if(archivoTD.getBoolLinea(i, LineaTopDown::flag::flag_linea_vacía)){
-			continue;
-		}
 		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,LineaTopDown::flag::flag_caracter_fin_linea)){
 			cantHijos++;
 		}
@@ -162,12 +168,15 @@ void CompiladorTopDown::compilar(){
 		//carga los datos del topdown
 		leeArchivoTD();
 
+		//	ELIMINAR LUEGO
+		std::cout << "cantidad de líneas en el archivo " << archivoTD.getCantidadLineas() << std::endl;
+
+		/*
 		//analiza si algo dentro del Archivo ha salido mal
 		if(archivoTD.getError()){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD));
 		}
 
-		
 		if(revisaCorrectoDentado()==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
@@ -183,6 +192,7 @@ void CompiladorTopDown::compilar(){
 
 		//guarda todo lo que se procesó en el archivo formateado
 		guardaEnArchivo();
+		*/
 
 		std::cout << "[CompiladorTopDown]: Compilación Completa." << std::endl;
 	}

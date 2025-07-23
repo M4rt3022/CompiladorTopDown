@@ -4,7 +4,7 @@
 #include <string>
 #include "ErrorHandler.h" // clase personalizada para facilitar el manejo de excepciones en el programa
 
-// Método interno que cuenta el dentado de la línea, se fija si está vacía o no, y modifica caracteres importantes
+// Método interno que cuenta el dentado de la línea y modifica caracteres importantes
 void LineaTopDown::analizaSintaxis(){
 	//primero se fija si tiene algo que leer
 	if(caracteres.empty()){
@@ -12,7 +12,6 @@ void LineaTopDown::analizaSintaxis(){
 		caracter_fin_linea = false;
 		iteracion_en_linea = false;
 		condicion_en_linea = false;
-		linea_vacía = true;
 		return;
 	}
 	//	cuenta el dentado de la línea y lo almacena
@@ -22,20 +21,6 @@ void LineaTopDown::analizaSintaxis(){
 		cantidadDentado++;
 	}
 	numeroDentado = cantidadDentado;
-	//	debe revisar que por lo menos un caracter es diferente a el caracter de dentado
-	bool encontro_caracter_diferente = false;
-	for (char c : caracteres){
-		if( c != '\t' ){
-			encontro_caracter_diferente = true;
-		}
-	}
-	encontro_caracter_diferente ? linea_vacía = false : linea_vacía = true;
-	if(linea_vacía){
-		caracter_fin_linea = false;
-		iteracion_en_linea = false;
-		condicion_en_linea = false;
-		return;
-	}
 	//	luego se fija que no tenga ningún caracter importante repetido
 	//	debe abarcar que no encuentre repetido ni caracter_fin_linea ni iteracion_en_linea ni condicion_en_linea
 	try{
@@ -54,7 +39,7 @@ void LineaTopDown::analizaSintaxis(){
 }
 
 //constructores
-LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), iteracion_en_linea(false), condicion_en_linea(false),linea_vacía(true){};
+LineaTopDown::LineaTopDown():numeroDentado(0), caracteres(""), caracter_fin_linea(false), iteracion_en_linea(false), condicion_en_linea(false){};
 LineaTopDown::LineaTopDown(const std::string& carac){
 	caracteres = carac;
 	caracter_fin_linea = false;
@@ -77,8 +62,6 @@ bool LineaTopDown::getValorFlag(const flag& f){
 			case flag::flag_iteracion_en_linea:	return (static_cast<int>(iteracion_en_linea));
 
 			case flag::flag_condicion_en_linea:	return (static_cast<int>(condicion_en_linea));
-
-			case flag::flag_linea_vacía:		return (static_cast<int>(linea_vacía));
 
 			default:	throw(ErrorHandler(TipoError::ERROR_LINEA_BOOL_INEXISTENTE));
 
@@ -116,7 +99,6 @@ LineaTopDown& LineaTopDown::operator=(const LineaTopDown&l){
 	caracter_fin_linea = l.caracter_fin_linea;
 	iteracion_en_linea = l.iteracion_en_linea;
 	condicion_en_linea = l.condicion_en_linea;
-	linea_vacía = l.linea_vacía;
 	return *this;
 }
 std::istream& operator>>(std::istream&is, LineaTopDown&l){

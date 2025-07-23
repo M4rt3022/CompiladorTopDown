@@ -15,36 +15,22 @@ void ArchivoTopDown::asignarComienzosNodos(){
 	int i = 0;
 	int dentadoAuxiliar;
 	for(;i<getCantidadLineas();i++){
-		//salteo líneas vacías
-		while(LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)){
-			i++;
-		}
 		ComienzoNodos.push_back(i);
 		dentadoAuxiliar = LineasArchivo[i].getDentado();
 		//salteo lo que es el mismo nodo
-		while((LineasArchivo[i].getDentado() == dentadoAuxiliar || LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)) && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
+		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
 			i++;
 		}
 	}
 }
 
 //método interno, revisa que por lo menos una línea no esté vacía
-//	esto tal vez pueda hacerlo más efectivo
+//	hice que este método revise que tenga una línea, ya que leeDesdeArchivo elimina automáticamente las líneas vacías
 void ArchivoTopDown::revisaArchivoNoVacio(){
-	bool archivo_tiene_algo = false;
 	try{
 		if(getCantidadLineas()==0){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
-		for(int i = 0; i< getCantidadLineas();i++){
-			if(!LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_linea_vacía)){
-				archivo_tiene_algo = true;
-			}
-		}
-		if(!archivo_tiene_algo){
-			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
-		}
-		return;
 	}
 	catch(const ErrorHandler& error){
 		std::cerr << "[ERROR]: " << error.what() << std::endl;
@@ -77,9 +63,6 @@ void ArchivoTopDown::getContenidoLinea(const int & orden,std::string& salida){
 	try{
 		if( orden > static_cast<int>(LineasArchivo.size()) ){
 			throw(ErrorHandler(TipoError::ERROR_LINEA_INEXISTENTE));
-		}
-		if(LineasArchivo[orden].getValorFlag(LineaTopDown::flag::flag_linea_vacía)==1){
-			throw(ErrorHandler(TipoError::ERROR_LINEA_STRING_VACIO));
 		}
 		LineasArchivo[orden].obtieneContenido(salida);
 		return;
@@ -132,13 +115,19 @@ int ArchivoTopDown::getCantidadNodos(){
 	return (static_cast<int>(ComienzoNodos.size()));
 }
 
-//ELIMINAR ESTO LUEGO
-void ArchivoTopDown::imprimeComienzosNodos(){
-	int cantidad = static_cast<int>(ComienzoNodos.size());
-	for(int i = 0;i < cantidad; i++){
-		std::cout << ComienzoNodos[i] << std::endl;
+//método usado para revisar que una línea esté vacía o no
+int ArchivoTopDown::estaVacia(std::string & caracteres){
+	bool encontro_caracter_diferente = false;
+	for (char c : caracteres){
+		if( c != '\t' ){
+			encontro_caracter_diferente = true;
+		}
 	}
-	return;
+	if(encontro_caracter_diferente){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 //método para leer todo el archivo para almacenar la información en las LineasArchivo
@@ -163,6 +152,11 @@ void ArchivoTopDown::leeDesdeArchivo(){
 		entrada.seekg(0, entrada.beg);
 		for (int i = 0; i < cantidadLineas; ++i) {
 			std::getline(entrada,auxiliar);
+			//si está vacía, no la guarda
+			if(estaVacia(auxiliar)){
+				std::cout << "esta línea está vacía" <<std::endl;
+				continue;
+			}
 			LineasArchivo[i] = LineaTopDown(auxiliar);
 		}
 		//busca donde comienza cada nodo

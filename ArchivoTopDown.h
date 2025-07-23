@@ -45,8 +45,8 @@ class ArchivoTopDown{
 		//	ESTO ES AMBIGUO, DEBE SER CAMBIADO
 		int getCantidadNodos();
 
-		//ELIMINAR ESTO LUEGO
-		void imprimeComienzosNodos();
+		//método usado para revisar que una línea esté vacía o no
+		int estaVacia(std::string & caracteres);
 
 		//método para leer todo el archivo para almacenar la información en las LineasArchivo
 		void leeDesdeArchivo();

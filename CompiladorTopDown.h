@@ -23,7 +23,7 @@ class CompiladorTopDown{
 		//método para buscar el título del TD, devuelve el numero de línea en donde termina el título, sino, -1
 		int buscaTituloTP();
 
-		//toma el archivo y busca que todas las lineas luego del título tengan por lo menos 1 tabulador
+		// busca que ninguna línea tenga 2 tabuladores más que la anterior y que el título se encuentre bien escrito
 		int revisaCorrectoDentado();
 
 		//método que toma desde un número de línea en específico y junta su contenido hasta encontrar un caracter_fin_linea
