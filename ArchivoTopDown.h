@@ -41,6 +41,9 @@ class ArchivoTopDown{
 		//devuelve el valor de un ComienzoNodos
 		int getComienzoNodo(const int& numero);
 
+		//devuelve la cantidad de comienzosNodos que hay
+		int getCantidadComienzosNodos(){return(static_cast<int>(ComienzoNodos.size()));};
+
 		//método que cuenta la cantidad de comienzos de nodos que tiene y lo devuelve
 		//	ESTO ES AMBIGUO, DEBE SER CAMBIADO
 		int getCantidadNodos();

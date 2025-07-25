@@ -12,15 +12,12 @@ void ArchivoTopDown::asignarComienzosNodos(){
 	if(getCantidadLineas()==0){
 		return;
 	}
-	int i = 0;
-	int dentadoAuxiliar;
-	for(;i<getCantidadLineas();i++){
+	int j;
+	for(int i=0 ;i<getCantidadLineas();i++){
 		ComienzoNodos.push_back(i);
-		dentadoAuxiliar = LineasArchivo[i].getDentado();
 		//salteo lo que es el mismo nodo
-		while(LineasArchivo[i].getDentado() == dentadoAuxiliar && 0 == LineasArchivo[i].getValorFlag(LineaTopDown::flag::flag_caracter_fin_linea)){
-			i++;
-		}
+		for(j=i;j<getCantidadLineas()&&(0==getBoolLinea(j, LineaTopDown::flag::flag_caracter_fin_linea));j++);
+		i = j;
 	}
 }
 
@@ -125,9 +122,8 @@ int ArchivoTopDown::estaVacia(std::string & caracteres){
 	}
 	if(encontro_caracter_diferente){
 		return 0;
-	}else{
-		return 1;
 	}
+	return 1;
 }
 
 //método para leer todo el archivo para almacenar la información en las LineasArchivo
@@ -141,25 +137,24 @@ void ArchivoTopDown::leeDesdeArchivo(){
 		}
 		// Contar líneas válidas
 		while (std::getline(entrada, auxiliar)) {
-			cantidadLineas++;
+			if(!estaVacia(auxiliar)){
+				cantidadLineas++;
+			}
 		}
 		if (cantidadLineas == 0) {
 			throw(ErrorHandler(TipoError::ERROR_LINEA_ARCHIVO_VACÍO));
 		}
 		LineasArchivo.resize(cantidadLineas);
-		std::cout << "cantidad de líneas reservadas " << cantidadLineas << std::endl;
 		// Volver a leer desde el principio
 		entrada.clear();
 		entrada.seekg(0, entrada.beg);
 		for (int i = 0; i < cantidadLineas; ++i) {
 			std::getline(entrada,auxiliar);
 			//si está vacía, no la guarda
-			if(1==estaVacia(auxiliar)){
-				std::cout << "esta línea está vacía" <<std::endl;
+			if(estaVacia(auxiliar)){
 				continue;
 			}
 			LineasArchivo[i] = LineaTopDown(auxiliar);
-			std::cout << "se guardo una línea" << std::endl;
 		}
 		//busca donde comienza cada nodo
 		asignarComienzosNodos();

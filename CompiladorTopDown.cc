@@ -30,31 +30,41 @@ int CompiladorTopDown::buscaTituloTP(){
 	return 0;
 }
 
-// busca que ninguna línea tenga 2 tabuladores más que la anterior y que el título se encuentre bien escrito
-// función sin terminar
+// solo revisa que estén correctamente dentadas las líneas de comienzoNodos
 int CompiladorTopDown::revisaCorrectoDentado(){
 	std::cout << "[CompiladorTopDown]: Revisando dentado en el archivo" << std::endl;
-	int dentadoActual;
-	int orden;
-	bool es_valida = true;	//con esto reviso cada línea
-	//primero reviso que todas las líneas excepto el título tengan 1 dentado más que el título
-	// guardo el dentado que tiene el título que comienza en comienzosNodos(0);
-	orden = archivoTD.getComienzoNodo(0);
-	dentadoActual = archivoTD.getDentadoLinea(orden);
-	// reviso que todas las líneas del título tengan el mismo dentado
-	for(;0==archivoTD.getBoolLinea(orden, LineaTopDown::flag::flag_caracter_fin_linea)&&orden<archivoTD.getCantidadLineas();orden++){
-		if(archivoTD.getDentadoLinea(orden)==dentadoActual){
-			es_valida = true;
-		}else{
-			es_valida = false;
+	//toma la cantidad de caracteres que tiene la línea de comienzo del título -> será la base para las demás
+	int cantidadTabsTitulo = archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(0));
+	int cantidadTabsActual;
+	int cantidadTabsSiguiente;
+	bool esValida = false;
+	// primero revisa que todas las líneas tengan más de un dentado que el título
+	for(int i = 1;i<archivoTD.getCantidadComienzosNodos();i++){
+		if(cantidadTabsTitulo<archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i))){
+			esValida = true;
 		}
-		if(!es_valida){
+		if(!esValida){
+			return 1;
+			break;
+		}
+	}
+	// si la siguiente línea tiene +1 tabs que donde estoy parado, es correcta, si tiene menos o igual, también
+	// sino se cumple lo anterior, es falsa
+	for(int i=1;i<(archivoTD.getCantidadComienzosNodos()-1);i++){
+		//guardo dentado de línea actual
+		cantidadTabsActual = archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i));
+		//reviso la siguiente
+		cantidadTabsSiguiente = archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i+1));
+		if((cantidadTabsActual>=cantidadTabsSiguiente)||(cantidadTabsActual+1==cantidadTabsSiguiente)){
+			esValida = true;
+		}else{
+			esValida = false;
+		}
+		if(!esValida){
 			return 1;
 		}
 	}
-	//ahora reviso que todas las líneas del archivo luego del título tengan por lo menos 1 dentado más que el título
-	orden = archivoTD.getComienzoNodo(1);
-	for(;;)
+	// si llega hasta acá, significa que está todo ok
 	return 0;
 }
 
@@ -87,6 +97,7 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 }
 
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
+//	ESTO ESTA MAL, DEBE SOLO ANALIZAR LOS COMIENZOS DE NODOS PARA VER EL DENTADO, LO DEMÁS NO IMPORTA
 int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
 	int cantHijos = 0;
 	if(numeroLinea > archivoTD.getCantidadLineas()){
@@ -168,10 +179,6 @@ void CompiladorTopDown::compilar(){
 		//carga los datos del topdown
 		leeArchivoTD();
 
-		//	ELIMINAR LUEGO
-		std::cout << "cantidad de líneas en el archivo " << archivoTD.getCantidadLineas() << std::endl;
-
-		/*
 		//analiza si algo dentro del Archivo ha salido mal
 		if(archivoTD.getError()){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD));
@@ -181,6 +188,7 @@ void CompiladorTopDown::compilar(){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
 
+		/*
 		int numLineaAux = buscaTituloTP();
 		if(numLineaAux==-1){
 			throw (ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));
