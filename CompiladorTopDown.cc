@@ -72,21 +72,13 @@ int CompiladorTopDown::revisaCorrectoDentado(){
 //utiliza el orden enviado como referencia y lo modifica
 void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida){
 	salida = "";
-	int dentado;
 	//primero debo revisar que el orden exista
 	if(numLinea > archivoTD.getCantidadLineas()){
 		return ;
 	} 
 	int numLineaAux = numLinea;
 	//acá debe ir almacenando los contenidos en el string auxiliar y luego devolverlo 
-	dentado = archivoTD.getDentadoLinea(numLineaAux);
 	for(; numLineaAux < archivoTD.getCantidadLineas() ;numLineaAux++){
-		//si pasa por una línea con un dentado diferente a donde comenzó, deja de juntar contenido
-		//	ESTO TIENE UN ERROR: terminará de juntar contenido si encuentra una línea con otro dentado y que tenga
-		//	el flag, esto puede generar que junte contenido de una línea sin que termine en ';'
-		if(archivoTD.getDentadoLinea(numLineaAux)!=dentado){
-			break;
-		}
 		archivoTD.getContenidoLinea(numLineaAux, salida);
 		// si encontró un final de línea, termina de juntar contenido
 		if(archivoTD.getBoolLinea(numLineaAux,LineaTopDown::flag::flag_caracter_fin_linea)){
@@ -97,25 +89,22 @@ void CompiladorTopDown::juntaContenido(const int & numLinea,std::string& salida)
 }
 
 //método que cuenta cuantos hijos tiene un nodo y lo devuelve;
-//	ESTO ESTA MAL, DEBE SOLO ANALIZAR LOS COMIENZOS DE NODOS PARA VER EL DENTADO, LO DEMÁS NO IMPORTA
-int CompiladorTopDown::cuentaHijos(const int& numeroLinea){
+// esto solo funciona si recibe un orden de comienzo de nodo
+int CompiladorTopDown::cuentaHijos(const int& ordenComienzoNodo){
 	int cantHijos = 0;
-	if(numeroLinea > archivoTD.getCantidadLineas()){
-		return 1;
+	int cantidadTabs;
+	if(ordenComienzoNodo>archivoTD.getCantidadComienzosNodos()){
+		return -1;
 	}
-	int cantidadTabs = archivoTD.getDentadoLinea(numeroLinea);
-	//debo saltear la cantidad de líneas que tenga el mismo nodo
-	int dondeTermina = numeroLinea;
-	while(dondeTermina < archivoTD.getCantidadLineas()&&archivoTD.getBoolLinea(dondeTermina,LineaTopDown::flag::flag_caracter_fin_linea)==0){
-		dondeTermina++;
-	}
-	//ahora cuenta la cantidad de hijos luego de esa línea
-	dondeTermina++;
-	for(int i = dondeTermina; i < archivoTD.getCantidadLineas();i++){
-		if(cantidadTabs+1==archivoTD.getDentadoLinea(i)&&1==archivoTD.getBoolLinea(i,LineaTopDown::flag::flag_caracter_fin_linea)){
+	std::cout << "orden de comienzo de nodo ingresado : " << ordenComienzoNodo << std::endl;
+	cantidadTabs = archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(ordenComienzoNodo));
+	std::cout << "numero de tabs que tiene : " << cantidadTabs << std::endl;
+	for(int i = ordenComienzoNodo+1;i<archivoTD.getCantidadComienzosNodos();i++){
+		if(cantidadTabs+1==archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i))){
 			cantHijos++;
 		}
-		if(cantidadTabs>=archivoTD.getDentadoLinea(i)){
+		//en cuanto encuentre un nodo con igual o menor cantidad de tabs, paro de contar
+		if(cantidadTabs>=archivoTD.getDentadoLinea(archivoTD.getComienzoNodo(i))){
 			break;
 		}
 	}
@@ -184,10 +173,21 @@ void CompiladorTopDown::compilar(){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_ARCHIVOTD));
 		}
 
+		std::cout << "cantidad LineasGuardadas : " << archivoTD.getCantidadLineas() << std::endl;
+		std::cout << "cantidad de comienzod nodos guardados : "
+		for(int i=0;i<archivoTD.getCantidadComienzosNodos();i++){
+			std::cout << "ordenComienzo : " << archivoTD.getComienzoNodo(i) << std::endl;
+		}
+
 		if(revisaCorrectoDentado()==1){
 			throw(ErrorHandler(TipoError::ERROR_COMPILADOR_ERROR_DENTADO));
 		}
 
+		//ELIMINAR LUEGO
+		int cantidadHijos = cuentaHijos(0);
+		std::cout << "cantidad de hijos que tiene : " << cantidadHijos << std::endl;
+		//ELIMINAR LUEGO
+		
 		/*
 		int numLineaAux = buscaTituloTP();
 		if(numLineaAux==-1){

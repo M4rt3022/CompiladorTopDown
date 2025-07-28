@@ -1,0 +1,21 @@
+# ARCHIVO DE CONFIGURACIÓN PARA EL PROGRAMA QUE GENERA TOPDOWN
+# este mismo puede ser editado a gusto y se verá reflejado en el programa
+# [FALTA COMPLETAR DESCRIPCIÓN] 
+
+caracter_fin_linea = ;
+
+caracter_tabulador = \t
+
+caracter_comentario = #
+
+condicion_linea = si if
+
+iteracion_linea = repetir mientras for while
+
+formato_salida = pdf
+
+agregar_espacios = true
+
+un_solo_topdown = true
+
+imprimir_salida_programa = false
