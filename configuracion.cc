@@ -73,6 +73,14 @@ void Configuracion::cargaDesdeArchivo(const std::string& nombreArchivo){
 				case palabrasConfig::formato_salida:
 					//acá asigno lo que debo hacer
 					break;
+				case palabrasConfig::un_solo_topdown:
+					//acá asigno lo que debo hacer
+					break;
+				case palabrasConfig::imprimir_salida_programa:
+					//acá asigno lo que debo hacer
+					break;
+				default:
+					break;
 			}
 		}
 	}

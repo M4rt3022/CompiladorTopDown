@@ -1,53 +1,18 @@
-# ARCHIVO DE CONFIGURACIÓN PARA EL PROGRAMA QUE GENERA TOPDOWN
-#
-# COMO EDITARLO:
-# 	borrar/cambiar/agregar el caracter que veas luego del signo = siempre respetando un espacio por valor a configurar y entre las comillas
-# 	ejemplo:
-# 		- original: caracter_tabulador = "\t"
-# 		- editado : caracter_tabulador = " "
-#
-# COSAS A TENER EN CUENTA:
-#
-# 	- En cualquier caso de error en la lectura de preferencias en la configuración del programa, sea pérdida del archivo, nombre, mala edición del mismo o valores no permitidos
-# 	  el programa ignorará por completo el contenido de este, escribirá los valores por defecto.
-#
-# 	- Lista de valores por defecto:
-# 	  	caracter_fin_linea = ";"
-#		caracter_tabulador = "\t"		
-#		caracter_comentario = "#"
-#		condicion_linea = "si if"
-#		iteracion_linea = "repetir mientras for while"
-#		formato_salida = "pdf"
-#		un_solo_topdown = "true"
-#		imprimir_salida_programa = "false"
-#
-#	- Los caracters no deben interfereir los unos con los otros, esto es analizado previamente a ser guardados.
-#
-#	- Los booleanos y el formato de salida solo pueden tener un dato.
-
-# Caracter que pone fin al contenido de cada nodo
-caracter_fin_linea = ";"
-
-# Caracter que se asumirá como un tabulador y con el que el programa revisa el dentado del mismo archivo de entrada
-caracter_tabulador = "\t"
-
-# Caracter permitido para ingresar comentarios en el archivo de entrada
-caracter_comentario = "#"
-
-# Palabras que tendrá en cuenta para nodos de condición
-condicion_linea = "si if"
-
-# Palabras que tendrá en cuenta para nodos de iteración
-iteracion_linea = "repetir mientras for while"
-
-# Formato final del topdown, formatos aceptados: [agregar luego]
-formato_salida = "pdf"
-
-# Método interno que agrega un espacio en blanco luego de líneas que terminen en una palabra sin espacio, para que las palabras no queden pegadas
-agregar_espacios = "true"
-
-# Cuenta la cantidad de nodos y profundidad del topdown, si este es muy grande, puede crear dos topdown
-un_solo_topdown = "true"
-
-# Muestra mensajes por consola de como se ejecuta
-imprimir_salida_programa = "false"
+# Archivo de configuración para el programa creaTopDown, editar dentro de las comillas lo que se desee
+# que significa cada cosa:
+# caracter_fin_linea 		-> 	caracter que pone fin a cada nodo
+# caracter_tabulador 		-> 	Caracter que se asumirá como un tabulador y con el que el programa revisa el dentado del mismo archivo de entrada
+# caracter_comentario 		-> 	Caracter permitido para ingresar comentarios en el archivo de entrada
+# condicion_linea		->	Palabras que tendrá en cuenta para nodos de condición
+# iteracion_linea		->	Palabras que tendrá en cuenta para nodos de iteración
+# formato_salida		->	Formato final del topdown, formatos aceptados: [agregar luego]
+# un_solo_topdown		->	Cuenta la cantidad de nodos y profundidad del topdown, si este es muy grande, puede crear dos topdown
+# imprimir_salida_programa	->	Muestra mensajes por consola de como se ejecuta
+caracter_fin_linea: ";"
+caracter_tabulador: "\t"
+caracter_comentario: "#"
+condicion_linea: "si if"
+iteracion_linea: "repetir mientras for while"
+formato_salida: "pdf"
+un_solo_topdown: "true"
+imprimir_salida_programa: "false"
