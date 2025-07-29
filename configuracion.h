@@ -10,7 +10,6 @@ enum class palabrasConfig{
 	condicion_linea,
 	iteracion_linea,
 	formato_salida,
-	agregar_espacios,
 	un_solo_topdown,
 	imprimir_salida_programa,
 	desconocida,
@@ -23,7 +22,6 @@ class Configuracion{
 		std::vector<std::string> condicionLinea = {"si", "if"};
 		std::vector<std::string> iteracionLinea = {"repetir", "mientras", "for", "while"};
 		std::string formatoSalida = "pdf";
-		bool agregarEspacios = true;
 		bool unSoloTopDown = true;
 		bool imprimirSalidaPrograma = false;
 		// lee datos del archivo confg y los guarda
