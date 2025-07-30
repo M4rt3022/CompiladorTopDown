@@ -6,22 +6,23 @@
 #include <vector>
 #include "ErrorHandler.h"
 #include <unordered_map>
+// gpt
 static const std::unordered_map<std::string, palabrasConfig> mapaPalabras = {
-	{"caracter_fin_linea",palabrasConfig::caracter_fin_linea},
-	{"caracter_tabulador",palabrasConfig::caracter_tabulador},
-	{"caracter_comentario",palabrasConfig::caracter_comentario},
-	{"condicion_linea",palabrasConfig::condicion_linea},
-	{"iteracion_linea",palabrasConfig::iteracion_linea},
-	{"formato_salida",palabrasConfig::formato_salida},
-	{"un_solo_topdown",palabrasConfig::un_solo_topdown},
-	{"imprimir_salida_programa",palabrasConfig::imprimir_salida_programa}
+	{"fin_linea:",palabrasConfig::fin_linea},
+	{"tabulador:",palabrasConfig::tabulador},
+	{"comentario:",palabrasConfig::comentario},
+	{"condicion_linea:",palabrasConfig::condicion_linea},
+	{"iteracion_linea:",palabrasConfig::iteracion_linea},
+	{"formato_salida:",palabrasConfig::formato_salida},
+	{"un_solo_topdown:",palabrasConfig::un_solo_topdown},
+	{"imprimir_salida_programa:",palabrasConfig::imprimir_salida_programa}
 };
 void Configuracion::cargaDesdeArchivo(const std::string& nombreArchivo){
 	try{
 		int cantidadLineas;
 		std::ifstream archivo;
 		std::string linea;
-		std::string palabraABuscar;
+		std::string palabra;
 		std::istringstream iss;
 		size_t posicion;
 		palabrasConfig palabraEnum = palabrasConfig::desconocida;
@@ -49,19 +50,23 @@ void Configuracion::cargaDesdeArchivo(const std::string& nombreArchivo){
 			}
 			//extrae una línea, extrae la primer palabra y la busca en mapaPalabras
 			iss.str(linea);
-			iss >> palabraABuscar;
-			auto it = mapaPalabras.find(palabraABuscar);
+			iss >> palabra;
+			auto it = mapaPalabras.find(palabra);
+			if(it == mapaPalabras.end()){
+				palabraEnum = palabrasConfig::desconocida;
+				continue;
+			}
 			if(it != mapaPalabras.end()){
 				palabraEnum = it->second;
 			}
 			switch(palabraEnum){
-				case palabrasConfig::caracter_fin_linea:
+				case palabrasConfig::fin_linea:
 					//acá asigno lo que debo hacer
 					break;
-				case palabrasConfig::caracter_tabulador:
+				case palabrasConfig::tabulador:
 					//acá asigno lo que debo hacer
 					break;
-				case palabrasConfig::caracter_comentario:
+				case palabrasConfig::comentario:
 					//acá asigno lo que debo hacer
 					break;
 				case palabrasConfig::condicion_linea:
@@ -85,7 +90,41 @@ void Configuracion::cargaDesdeArchivo(const std::string& nombreArchivo){
 		}
 	}
 	catch(const ErrorHandler& error){
-		std::cout << "[ERROR]: " << error.what() << std::endl;
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
+		return;
+	}
+}
+// Edita las variables Internas para volver a la configuración por defecto, sin necesidad de un archivo
+void Configuracion::restablecerConfig(void){
+	finLinea = ";";
+	tabulador = "\t";
+	comentario = "#";
+	condicionLinea = {"si", "if"};
+	iteracionLinea = {"repetir", "mientras", "for", "while"};
+	formatoSalida = "pdf";
+	unSoloTopDown = true;
+	imprimirSalidaPrograma = false;
+}
+// Hace un nuevo archivo de configuración con los datos por defecto
+void creaArchivoConfig(void){
+	std::ofstream archivo("config");
+	// no hacen falta los comentarios, el readme tiene suficiente información para saber que hay en este archvo
+	try{
+		if(!archivo){
+			throw(ErrorHandler(TipoError::ERROR_CONFIGURACION_APERTURA_ARCHIVO));
+		}
+		archivo << "fin_linea: \";\"\n"; 
+		archivo << "tabulador: \"\\t\"\n"; 
+		archivo << "comentario: \"#\"\n"; 
+		archivo << "condicion_linea: \"si if\"\n"; 
+		archivo << "iteracion_linea: \"repetir mientras for while\"\n"; 
+		archivo << "formato_salida: \"pdf\"\n"; 
+		archivo << "un_solo_topdown: \"true\"\n"; 
+		archivo << "imprimir_salida_programa: \"false\"\n"; 
+		archivo.close();
+	}
+	catch(const ErrorHandler& error){
+		std::cerr << "[ERROR]: " << error.what() << std::endl;
 		return;
 	}
 }

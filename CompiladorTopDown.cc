@@ -165,6 +165,7 @@ void CompiladorTopDown::guardaEnArchivo(){
 void CompiladorTopDown::compilar(){
 	std::cout << "[CompiladorTopDown]: Compilando topdown" << std::endl;
 	try{
+		/*
 		//carga los datos del topdown
 		leeArchivoTD();
 
@@ -174,7 +175,7 @@ void CompiladorTopDown::compilar(){
 		}
 
 		std::cout << "cantidad LineasGuardadas : " << archivoTD.getCantidadLineas() << std::endl;
-		std::cout << "cantidad de comienzod nodos guardados : "
+		std::cout << "cantidad de comienzod nodos guardados : ";
 		for(int i=0;i<archivoTD.getCantidadComienzosNodos();i++){
 			std::cout << "ordenComienzo : " << archivoTD.getComienzoNodo(i) << std::endl;
 		}
@@ -188,7 +189,6 @@ void CompiladorTopDown::compilar(){
 		std::cout << "cantidad de hijos que tiene : " << cantidadHijos << std::endl;
 		//ELIMINAR LUEGO
 		
-		/*
 		int numLineaAux = buscaTituloTP();
 		if(numLineaAux==-1){
 			throw (ErrorHandler(TipoError::ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN));

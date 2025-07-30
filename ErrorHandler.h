@@ -19,7 +19,8 @@ enum class TipoError {
 	ERROR_COMPILADOR_OBTENER_TITULO_TOPDOWN,
 	ERROR_CONFIGURACION_APERTURA_ARCHIVO,
 	ERROR_CONFIGURACION_ARCHIVO_NO_VALIDO,
-	ERROR_CONFIGURACION_ARCHIVO_VACÍO
+	ERROR_CONFIGURACION_ARCHIVO_VACÍO,
+	ERROR_CONFIGURACION_CREACION_ARCHIVO
 };
 //clase que busca el error al ser inicializada y devuelve un mensaje en consecuencia
 class ErrorHandler : public std::exception
@@ -59,6 +60,8 @@ class ErrorHandler : public std::exception
 					return "El formato con que se escribió el archivo de configuración es incorrecto";
 				case(TipoError::ERROR_CONFIGURACION_ARCHIVO_VACÍO):
 					return "El archivo de configuración está vacío";
+				case(TipoError::ERROR_CONFIGURACION_CREACION_ARCHIVO):
+					return "Falló la creación del nuevo archivo de configuración";
 				default:
 					return "Error desconocido";
 			}

@@ -1,16 +1,6 @@
-# Archivo de configuración para el programa creaTopDown, editar dentro de las comillas lo que se desee
-# que significa cada cosa:
-# caracter_fin_linea 		-> 	caracter que pone fin a cada nodo
-# caracter_tabulador 		-> 	Caracter que se asumirá como un tabulador y con el que el programa revisa el dentado del mismo archivo de entrada
-# caracter_comentario 		-> 	Caracter permitido para ingresar comentarios en el archivo de entrada
-# condicion_linea		->	Palabras que tendrá en cuenta para nodos de condición
-# iteracion_linea		->	Palabras que tendrá en cuenta para nodos de iteración
-# formato_salida		->	Formato final del topdown, formatos aceptados: [agregar luego]
-# un_solo_topdown		->	Cuenta la cantidad de nodos y profundidad del topdown, si este es muy grande, puede crear dos topdown
-# imprimir_salida_programa	->	Muestra mensajes por consola de como se ejecuta
-caracter_fin_linea: ";"
-caracter_tabulador: "\t"
-caracter_comentario: "#"
+fin_linea: ";"
+tabulador: "\t"
+comentario: "#"
 condicion_linea: "si if"
 iteracion_linea: "repetir mientras for while"
 formato_salida: "pdf"
