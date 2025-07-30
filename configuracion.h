@@ -12,13 +12,13 @@ enum class palabrasConfig{
 	formato_salida,
 	un_solo_topdown,
 	imprimir_salida_programa,
-	desconocida,
+	Linea_sin_proposito,
 };
 class Configuracion{
 	public:
 		std::string finLinea = ";";
 		std::string tabulador = "\t";
-		std::string comentario = "\t";
+		std::string comentario = "#";
 		std::vector<std::string> condicionLinea = {"si", "if"};
 		std::vector<std::string> iteracionLinea = {"repetir", "mientras", "for", "while"};
 		std::string formatoSalida = "pdf";
@@ -30,7 +30,9 @@ class Configuracion{
 		void restablecerConfig(void);
 		// Hace un nuevo archivo de configuración con los datos por defecto
 		void creaArchivoConfig(void);
-		// recibe una línea y verifica que sea de configuración, que sea válida. retorna orden enum o desconocida en otro caso
+		// recibe una línea y verifica que sea de configuración, que sea válida. retorna orden enum según el caso
 		int LineaConfigEsCorrecta(const std::string& linea);
+		// cuenta la cantidad de palabras entre comillas de un string
+		int cantidadPalabrasEntreComillas(const std::string& s);
 };
 #endif

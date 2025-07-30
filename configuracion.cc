@@ -128,3 +128,53 @@ void creaArchivoConfig(void){
 		return;
 	}
 }
+// recibe una línea y verifica que sea de configuración, que sea válida. retorna orden enum según el caso
+int Configuracion::LineaConfigEsCorrecta(const std::string& linea){
+	palabrasConfig palabraEnum = palabrasConfig::Linea_sin_proposito;
+	std::string palabra;
+	std::stringstream iss(linea);
+	if(linea.empty()){
+		return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
+	}
+	// extae de la línea, la primer palabra
+	iss >> palabra;
+	// la busca entre las palabras reservadas para configurar
+	auto it = mapaPalabras.find(palabra);
+	if(it == mapaPalabras.end()){
+		return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
+	}
+	if(it != mapaPalabras.end()){
+		palabraEnum = it->second;
+	}
+	// según el tipo de configuración, analiza la línea
+	switch(palabraEnum){
+		case palabrasConfig::fin_linea:
+			break;
+		case palabrasConfig::tabulador:
+			break;
+		case palabrasConfig::comentario:
+			break;
+		case palabrasConfig::condicion_linea:
+			break;
+		case palabrasConfig::iteracion_linea:
+			break;
+		case palabrasConfig::formato_salida:
+			break;
+		case palabrasConfig::un_solo_topdown:
+			break;
+		case palabrasConfig::imprimir_salida_programa:
+			break;
+		default:
+			return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
+			break;
+	}
+}
+// cuenta la cantidad de palabras entre comillas de un string
+int cantidadPalabrasEntreComillas(const std::string& s){
+	std::string palabra;
+	if(s.empty()){
+		return -1;
+	}
+	// cuenta la cantidad de comillas que tiene antes que nada, por si está mal escrita
+	
+}
