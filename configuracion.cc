@@ -1,7 +1,6 @@
 #include "configuracion.h"
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
 #include <vector>
 #include "ErrorHandler.h"
@@ -17,80 +16,38 @@ static const std::unordered_map<std::string, palabrasConfig> mapaPalabras = {
 	{"un_solo_topdown:",palabrasConfig::un_solo_topdown},
 	{"imprimir_salida_programa:",palabrasConfig::imprimir_salida_programa}
 };
-void Configuracion::cargaDesdeArchivo(const std::string& nombreArchivo){
-	try{
-		int cantidadLineas;
-		std::ifstream archivo;
-		std::string linea;
-		std::string palabra;
-		std::istringstream iss;
-		size_t posicion;
-		palabrasConfig palabraEnum = palabrasConfig::desconocida;
-		archivo.open(nombreArchivo);
-		if(archivo.fail()){
-			throw (ErrorHandler(TipoError::ERROR_CONFIGURACION_APERTURA_ARCHIVO));
+// lee datos del archivo confg y los guarda
+void Configuracion::cargaDatosDesdeArchivo(void){
+	std::ifstream archivo("config");
+	std::string linea;
+	std::string::iterator it;
+	int cantidadLineas = 0;
+	int cantidadCosasEditadas = 0;
+	palabrasConfig tipoConfig;
+	try {
+		// abrir archivo
+		if(!archivo){
+			throw( ErrorHandler(TipoError::ERROR_CONFIGURACION_APERTURA_ARCHIVO));
 		}
-		while (std::getline(archivo,linea)){
-			cantidadLineas++;
-		}
+		//contar líneas y leer hasta que se terminen
+		cantidadLineas = cantidadLineasArchivo(archivo);
 		if(cantidadLineas == 0){
 			throw (ErrorHandler(TipoError::ERROR_CONFIGURACION_ARCHIVO_VACÍO));
 		}
-		archivo.clear();
-		archivo.seekg(0,archivo.beg);
 		for(int i=0;i<cantidadLineas;i++){
 			std::getline(archivo,linea);
-			//si es una línea de comentario o una línea vacía, la ignoro
-			if(linea.empty()){
+			tipoConfig = tipoLineaConfig(linea);
+			if(tipoConfig == palabrasConfig::Linea_sin_proposito){
 				continue;
 			}
-			posicion = linea.find('#');
-			if(posicion != std::string::npos){
-				continue;
-			}
-			//extrae una línea, extrae la primer palabra y la busca en mapaPalabras
-			iss.str(linea);
-			iss >> palabra;
-			auto it = mapaPalabras.find(palabra);
-			if(it == mapaPalabras.end()){
-				palabraEnum = palabrasConfig::desconocida;
-				continue;
-			}
-			if(it != mapaPalabras.end()){
-				palabraEnum = it->second;
-			}
-			switch(palabraEnum){
-				case palabrasConfig::fin_linea:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::tabulador:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::comentario:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::condicion_linea:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::iteracion_linea:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::formato_salida:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::un_solo_topdown:
-					//acá asigno lo que debo hacer
-					break;
-				case palabrasConfig::imprimir_salida_programa:
-					//acá asigno lo que debo hacer
-					break;
-				default:
-					break;
+			if(aplicaConfiguracion(tipoConfig,linea)==0){
+				cantidadCosasEditadas++;
 			}
 		}
-	}
-	catch(const ErrorHandler& error){
-		std::cerr << "[ERROR]: " << error.what() << std::endl;
+
+	} catch (const ErrorHandler& error) {
+		std::cerr << "[ERROR]: " << error.what() << " , restableciendo configuración por defecto.\n";
+		restablecerConfig();
 		return;
 	}
 }
@@ -129,52 +86,73 @@ void creaArchivoConfig(void){
 	}
 }
 // recibe una línea y verifica que sea de configuración, que sea válida. retorna orden enum según el caso
-int Configuracion::LineaConfigEsCorrecta(const std::string& linea){
+palabrasConfig Configuracion::tipoLineaConfig(const std::string& linea){
 	palabrasConfig palabraEnum = palabrasConfig::Linea_sin_proposito;
 	std::string palabra;
-	std::stringstream iss(linea);
+	auto it = linea.begin();
 	if(linea.empty()){
-		return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
+		return palabrasConfig::Linea_sin_proposito;
 	}
 	// extae de la línea, la primer palabra
-	iss >> palabra;
+	sacaPalabra(it, linea, palabra, '\"');
 	// la busca entre las palabras reservadas para configurar
-	auto it = mapaPalabras.find(palabra);
-	if(it == mapaPalabras.end()){
-		return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
+	auto itmapa = mapaPalabras.find(palabra);
+	if(itmapa == mapaPalabras.end()){
+		return palabrasConfig::Linea_sin_proposito;
 	}
-	if(it != mapaPalabras.end()){
-		palabraEnum = it->second;
+	if(itmapa != mapaPalabras.end()){
+		palabraEnum = itmapa->second;
 	}
-	// según el tipo de configuración, analiza la línea
-	switch(palabraEnum){
-		case palabrasConfig::fin_linea:
-			break;
-		case palabrasConfig::tabulador:
-			break;
-		case palabrasConfig::comentario:
-			break;
-		case palabrasConfig::condicion_linea:
-			break;
-		case palabrasConfig::iteracion_linea:
-			break;
-		case palabrasConfig::formato_salida:
-			break;
-		case palabrasConfig::un_solo_topdown:
-			break;
-		case palabrasConfig::imprimir_salida_programa:
-			break;
-		default:
-			return (static_cast<int>(palabrasConfig::Linea_sin_proposito));
-			break;
+	if(2!=cuentaComillas(linea)){
+		return palabrasConfig::Linea_sin_proposito;
 	}
+	return palabraEnum;
 }
-// cuenta la cantidad de palabras entre comillas de un string
-int cantidadPalabrasEntreComillas(const std::string& s){
-	std::string palabra;
-	if(s.empty()){
+// increíble que esté usando este método
+void Configuracion::sacaPalabra(std::string::const_iterator& desde,const std::string& origen, std::string& destino,const char& caracterFinal){
+	destino.clear();
+	// salteo espacios en blanco
+	while(desde != origen.end() && (*desde == ' '|| *desde == '\t')){
+		desde ++;
+	}
+	// empiezo a copiar cualquier caracter que sea diferente a un espacio o a un \n
+	while(desde != origen.end() & (*desde != ' '&& *desde != '\n' && *desde != caracterFinal)){
+		desde++;
+	}
+	return;
+}
+// cuenta la cantidad de comillas que tiene un string, devuelve en que posición encontró a la primer comilla
+int Configuracion::cuentaComillas(const std::string& entrada){
+	int cantidadComillas = 0;
+	auto it = entrada.begin();
+	while (it != entrada.end()){
+		if (*it=='\"'){
+			cantidadComillas++;
+		}
+	}
+	return cantidadComillas;
+}
+// cuenta la cantiad de líneas del archivo
+int Configuracion::cantidadLineasArchivo(std::ifstream& archivo){
+	int lineas = 0;
+	std::string stringAuxiliar;
+	if(!archivo){
 		return -1;
 	}
-	// cuenta la cantidad de comillas que tiene antes que nada, por si está mal escrita
+	while(std::getline(archivo,stringAuxiliar)){
+		lineas++;
+	}
+	archivo.clear();
+	archivo.seekg(0,archivo.beg);
+	return lineas;
+}
+// toma un orden del enum palabrasConfig y edita el parámetro que corresponda, devuelve 0 si sale bien y de lo contrario !=0
+int Configuracion::aplicaConfiguracion(palabrasConfig& config, const std::string& linea){
+	if((config == palabrasConfig::Linea_sin_proposito)||(linea.empty())){
+		return 1;
+	}
+	switch (config) {
+		case (palabrasConfig::fin_linea):
 	
+	}
 }
