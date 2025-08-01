@@ -6,11 +6,15 @@
 #include "ErrorHandler.h"
 #include "ArchivoTopDown.h"
 #include "TopDown.h"
+#include "configuracion.h"
 class CompiladorTopDown{
 	private:
 		ArchivoTopDown archivoTD;
 		Topdown topdown;
 	public:
+		// clase que setea las palabras y caracteres importantes del programa
+		Configuracion config;
+
 		//constructor
 		CompiladorTopDown();
 

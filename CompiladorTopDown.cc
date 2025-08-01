@@ -1,6 +1,7 @@
 #include "CompiladorTopDown.h"
 #include "ErrorHandler.h"
 #include "LineaTopDown.h"
+#include "configuracion.h"
 #include <string>
 #include <vector>
 
@@ -165,6 +166,17 @@ void CompiladorTopDown::guardaEnArchivo(){
 void CompiladorTopDown::compilar(){
 	std::cout << "[CompiladorTopDown]: Compilando topdown" << std::endl;
 	try{
+
+		std::cout << "[CompiladorTopDown]: Leyendo datos de configuración\n";
+		config.cargaDatosDesdeArchivo();
+		std::cout << "Los datos son:\n";
+		std::cout << "formato: " << config.formatoSalida << "\n";
+		std::cout << "unSoloTopDown: " << config.unSoloTopDown << "\n";
+		std::cout << "imprimirSalida: " << config.imprimirSalidaPrograma << "\n";
+		std::cout << "buscando si existe si, if y tal vez en palabras de condicion\n";
+		std::cout << config.estaEnConfig(palabrasConfig::condicion_linea, "si") << "\n";
+		std::cout << config.estaEnConfig(palabrasConfig::condicion_linea, "if") << "\n";
+		std::cout << config.estaEnConfig(palabrasConfig::condicion_linea, "talvez") << "\n";
 		/*
 		//carga los datos del topdown
 		leeArchivoTD();
